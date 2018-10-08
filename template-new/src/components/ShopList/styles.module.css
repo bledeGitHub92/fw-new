@@ -1,0 +1,49 @@
+/* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
+/* stylelint-disable no-duplicate-selectors */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors */
+/* stylelint-disable declaration-bang-space-before,no-duplicate-selectors,string-no-newline */
+:global ul {
+  padding-left: 0;
+  margin-bottom: 0 !important;
+}
+:global li {
+  list-style: none;
+  list-style-type: none;
+}
+.shops {
+  /* &__current {
+    margin-right: .5em;
+  } */
+}
+.shops__wrapper {
+  display: inline-block;
+  padding: 0 .5em;
+  margin: 0 .5em;
+  cursor: pointer;
+}
+.shops__wrapper:hover {
+  background: #e6f7ff;
+}
+.shops__menu__wrapper {
+  background: #002140;
+  padding: .5em 0;
+  margin: .2em 0;
+}
+.shops__menu__wrapper :global(.ant-menu-submenu-arrow) {
+  display: none;
+}
+.shop__item {
+  color: #666666;
+  cursor: pointer;
+}
+.shop__item__name {
+  margin-left: .5em;
+}
+.shop__item__selected {
+  color: #333333;
+}
+@media only screen and (max-width: 768px) {
+  .shops__menu__wrapper :global(.ant-menu-submenu-arrow) {
+    display: block;
+  }
+}

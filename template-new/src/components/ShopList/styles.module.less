@@ -1,0 +1,64 @@
+@import '../style/themes/default.less';
+
+:global {
+  ul {
+    padding-left: 0;
+    margin-bottom: 0 !important;
+  }
+
+  li {
+    list-style: none;
+    list-style-type: none;
+  }
+}
+
+.shops {
+  &__wrapper {
+    display: inline-block;
+    padding: 0 .5em;
+    margin: 0 .5em;
+    cursor: pointer;
+
+    &:hover {
+      background: #e6f7ff;
+    }
+  }
+
+  &__menu__wrapper {
+    padding: .5em 0;
+    margin: .2em 0;
+
+    :global(.ant-menu-submenu-arrow) {
+      display: none;
+    }
+  }
+
+  /* &__current {
+    margin-right: .5em;
+  } */
+}
+
+.shop {
+  &__item {
+    color: #666666;
+    cursor: pointer;
+
+    &__name {
+      margin-left: .5em;
+    }
+
+    &__selected {
+      color: #333333;
+    }
+  }
+}
+
+@media only screen and (max-width: @screen-md) {
+  .shops {
+    &__menu__wrapper {
+      :global(.ant-menu-submenu-arrow) {
+        display: block;
+      }
+    }
+  }
+}
