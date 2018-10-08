@@ -14,7 +14,7 @@ var ownPath = __dirname;
 function appUpgrade(projectName) {
   var root = path.resolve(projectName);
   var oldPackagePath = path.resolve(root, 'package.json');
-  var newPackagePath = path.resolve(ownPath, 'template-new', 'package.json')
+  var newPackagePath = path.resolve(ownPath, 'template', 'package.json')
   var oldPackageFile = require(oldPackagePath);
   var newPackageFile = require(newPackagePath);
 

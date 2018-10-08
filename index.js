@@ -234,7 +234,7 @@ function install(callback) {
 }
 
 function run(appPath, appName) {
-  var templatePath = path.join(ownPath, 'template-new');
+  var templatePath = path.join(ownPath, 'template');
 
   if (fs.existsSync(templatePath)) {
     fs.copySync(templatePath, appPath);
