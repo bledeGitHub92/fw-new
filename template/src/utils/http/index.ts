@@ -11,22 +11,22 @@ export function post(
 ): AxiosPromise {
   const defaultConfig: RequestConfig = {
     requestType: 'JSONString',
-    headers: { 'ContentType': 'application/json;charset=utf-8' }
+    headers: { 'Content-Type': 'application/json;charset=utf-8' }
   };
   const options: RequestConfig = { ...defaultConfig, ...config };
 
   if (options.requestType && ['JSONString', 'formData', 'paramString'].includes(options.requestType)) {
-    options.headers['ContentType'] = 'application/json';
+    options.headers['Content-Type'] = 'application/json';
     switch (options.requestType) {
       case 'JSONString':
         data = JSON.stringify(data);
         break;
       case 'formData':
-        options.headers['ContentType'] = 'multipart/form-data';
+        options.headers['Content-Type'] = 'multipart/form-data';
         data = stringify(data);
         break;
       case 'paramString':
-        options.headers['ContentType'] = 'application/x-www-form-urlencoded';
+        options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
         data = Object.entries(data).map(([key, value]) => `${key}=${value}`).join('&');
         break;
     }
