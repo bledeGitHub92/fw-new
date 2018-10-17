@@ -26,8 +26,9 @@ class HeaderView extends PureComponent {
   }
 
   componentDidMount() {
+    const { dispatch } = this.props;
     document.addEventListener('scroll', this.handScroll, { passive: true });
-    this.props.dispatch({ type: 'user/fetchUser' });
+    dispatch({ type: 'user/fetchUser' });
   }
 
   componentWillUnmount() {
@@ -67,7 +68,6 @@ class HeaderView extends PureComponent {
       return;
     }
     if (key === 'logout') {
-      console.log(key);
       dispatch({ type: 'user/logout' });
     }
   };
@@ -152,10 +152,8 @@ class HeaderView extends PureComponent {
   }
 }
 
-export default connect(({ user, global, setting, loading }) => ({
+export default connect(({ user, global, setting }) => ({
   currentUser: user.currentUser,
   collapsed: global.collapsed,
-  fetchingNotices: loading.effects['global/fetchNotices'],
-  notices: global.notices,
   setting,
 }))(HeaderView);

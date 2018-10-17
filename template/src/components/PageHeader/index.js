@@ -27,7 +27,7 @@ export default class PageHeader extends PureComponent {
       tabBarExtraContent,
       loading = false,
       wide = false,
-      hiddenBreadcrumb = false,
+      hiddenBreadcrumb = true,
     } = this.props;
 
     const clsString = classNames(styles.pageHeader, className);

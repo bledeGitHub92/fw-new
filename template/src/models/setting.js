@@ -1,3 +1,7 @@
+/**
+ * @desc 主题配置
+ */
+
 import { message } from 'antd';
 import defaultSettings from '../defaultSettings';
 

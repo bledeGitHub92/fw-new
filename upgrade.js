@@ -1,3 +1,9 @@
+/**
+ * @var ownPath 模板路径
+ * @var root 项目路径
+ * @var overrideDirs 更新覆盖目录
+ */
+
 var inquirer = require('inquirer');
 var fs = require('fs-extra');
 var path = require('path');
@@ -10,8 +16,21 @@ var spawn = require('cross-spawn');
 var spinner = ora();
 
 var ownPath = __dirname;
+var overrideDirs = [
+  'components',
+  'e2e',
+  'layouts',
+  'locales',
+  'services',
+  'models',
+  'pages',
+  'utils',
+  'assets',
+  'defaultSettings.js',
+  'global.less',
+]
 
-function appUpgrade(projectName) {
+function appUpgrade (projectName) {
   var root = path.resolve(projectName);
   var oldPackagePath = path.resolve(root, 'package.json');
   var newPackagePath = path.resolve(ownPath, 'template', 'package.json')
@@ -28,12 +47,6 @@ function appUpgrade(projectName) {
     process.exit();
   }
 
-/*   console.log('正在检查版本号是否变化');
-  if (newPackageFile.version === oldPackageFile.version) {
-    console.log('脚手架没有新内容');
-    return ;
-  } */
-
   inquirer
     .prompt([
       {
@@ -42,8 +55,20 @@ function appUpgrade(projectName) {
         message:
           '请确认是否要将 ' +
           oldPackageFile.name +
-          ' 升级到最新？',
-        default: true
+          ' 升级到最新？\n' +
+          chalk.red('会覆盖一下目录或文件：\n') +
+          chalk.green('  1. /src/services/\n') +
+          chalk.green('  2. /src/models/\n') +
+          chalk.green('  3. /src/components/\n') +
+          chalk.green('  4. /src/assets/\n') +
+          chalk.green('  5. /src/e2e/\n') +
+          chalk.green('  6. /src/layouts/\n') +
+          chalk.green('  7. /src/locales/\n') +
+          chalk.green('  8. /src/pages/基础页面\n') +
+          chalk.green('  9. /src/utils/基础文件\n') +
+          chalk.green('  10. /src/defaultSettings.js\n') +
+          chalk.green('  11. /src/global.less\n'),
+        default: false
       }
     ])
     .then(answers => {
@@ -68,7 +93,17 @@ function appUpgrade(projectName) {
           newPackageFile.description = oldPackageFile.description;
           newPackageFile.author = oldPackageFile.author;
 
+          // 更新 package.json
           fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify(newPackageFile, null, 2));
+          // 更新 overrideDirs 里的文件
+          overrideDirs.forEach(file => {
+            var src = path.resolve(ownPath, 'template/src', file);
+            var dest = path.resolve(root, 'src', file);
+            fs.copySync(src, dest);
+            console.log(
+              chalk.dim(dest + ' 已更新!')
+            );
+          })
 
           if (answers.install) {
             process.chdir(root);
@@ -96,7 +131,7 @@ function appUpgrade(projectName) {
     });
 }
 
-function shouldUseYarn() {
+function shouldUseYarn () {
   try {
     execSync('yarn --version', {
       stdio: 'ignore'
@@ -107,7 +142,7 @@ function shouldUseYarn() {
   }
 }
 
-function install(callback) {
+function install (callback) {
   var command;
   var args;
   if (shouldUseYarn()) {

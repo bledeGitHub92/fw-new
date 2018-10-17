@@ -2,11 +2,11 @@ import React, { PureComponent } from 'react';
 import { Layout } from 'antd';
 import pathToRegexp from 'path-to-regexp';
 import classNames from 'classnames';
-import Link from 'umi/link';
+// import Link from 'umi/link';
 import styles from './index.less';
 import BaseMenu, { getMenuMatches } from './BaseMenu';
 import { urlToList } from '../_utils/pathTools';
-import ShopList from '@/components/ShopList'
+import ShopList from '@/components/ShopList';
 
 const { Sider } = Layout;
 
@@ -61,10 +61,14 @@ export default class SiderMenu extends PureComponent {
 
   static getDerivedStateFromProps(props, state) {
     const { pathname } = state;
-    if (props.location.pathname !== pathname) {
+    if (
+      props.location.pathname !== pathname ||
+      state.flatMenuKeyNums !== props.flatMenuKeys.length
+    ) {
       return {
         pathname: props.location.pathname,
         openKeys: getDefaultCollapsedSubMenus(props),
+        flatMenuKeyNums: props.flatMenuKeys.length,
       };
     }
     return null;

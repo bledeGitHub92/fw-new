@@ -34,10 +34,6 @@ export default [
     authority: ['admin'],
     routes: [
       {
-        path: '/admin/system',
-        component: './Account/Settings/BaseView',
-      },
-      {
         component: '404',
       },
     ],

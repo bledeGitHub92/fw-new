@@ -35,3 +35,6 @@ functions/mock
 
 # screenshot
 screenshot
+
+/node_modules
+/proxy.js

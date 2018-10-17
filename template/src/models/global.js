@@ -1,4 +1,4 @@
-import { queryNotices, getMenusInfo, getShopInfo, switchUserShop } from '@/services/api';
+import { getMenusInfo, getShopInfo, switchUserShop } from '@/services/api';
 import { getMenuData } from '@/utils/routerUtils';
 
 export default {
@@ -6,41 +6,17 @@ export default {
 
   state: {
     collapsed: false,
-    notices: [],
     menus: [],
     shops: [],
   },
 
   effects: {
-    *fetchNotices(_, { call, put }) {
-      const data = yield call(queryNotices);
-      yield put({
-        type: 'saveNotices',
-        payload: data,
-      });
-      yield put({
-        type: 'user/changeNotifyCount',
-        payload: data.length,
-      });
-    },
-    *clearNotices({ payload }, { put, select }) {
-      yield put({
-        type: 'saveClearedNotices',
-        payload,
-      });
-      const count = yield select(state => state.global.notices.length);
-      yield put({
-        type: 'user/changeNotifyCount',
-        payload: count,
-      });
-    },
-
     /* 获取菜单 */
     *fetchMenu(_, { call, put }) {
       const menus = yield call(getMenusInfo);
       yield put({
         type: 'setMenu',
-        payload: getMenuData(menus.data),
+        payload: getMenuData(menus),
       });
     },
 
@@ -50,7 +26,7 @@ export default {
 
       yield put({
         type: 'setShopList',
-        payload: shops.data,
+        payload: shops,
       });
     },
     /* 切换门店 */
@@ -59,11 +35,11 @@ export default {
         localStorage.setItem('shopId', payload.shopId);
       }
 
-      yield call(switchUserShop, payload)
+      yield call(switchUserShop, payload);
 
       // 重新请求
-      yield put({ type: 'fetchMenu' })
-      yield put({ type: 'fetchShop' })
+      yield put({ type: 'fetchMenu' });
+      yield put({ type: 'fetchShop' });
     },
   },
 
@@ -74,30 +50,18 @@ export default {
         collapsed: payload,
       };
     },
-    saveNotices(state, { payload }) {
-      return {
-        ...state,
-        notices: payload,
-      };
-    },
-    saveClearedNotices(state, { payload }) {
-      return {
-        ...state,
-        notices: state.notices.filter(item => item.type !== payload),
-      };
-    },
-    setMenu (state, { payload }) {
+    setMenu(state, { payload }) {
       return {
         ...state,
         menus: payload,
-      }
+      };
     },
     setShopList(state, { payload }) {
       return {
         ...state,
         shops: payload,
-      }
-    }
+      };
+    },
   },
 
   subscriptions: {

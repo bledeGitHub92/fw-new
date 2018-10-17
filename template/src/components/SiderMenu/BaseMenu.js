@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Menu, Icon } from 'antd';
 import Link from 'umi/link';
-import { formatMessage } from 'umi/locale';
+// import { formatMessage } from 'umi/locale';
 import pathToRegexp from 'path-to-regexp';
 import { urlToList } from '../_utils/pathTools';
 import styles from './index.less';
@@ -22,13 +22,39 @@ const getIcon = icon => {
   return icon;
 };
 
+/**
+ * Recursively flatten the data
+ * [{path:string},{path:string}] => {path,path2}
+ * @param  menus
+ */
+const getFlatMenuKeys = menus => {
+  let keys = [];
+  menus.forEach(item => {
+    if (item.children) {
+      keys = keys.concat(getFlatMenuKeys(item.children));
+    }
+    keys.push(item.path.indexOf('#') > -1 ? item.path.split('#')[1] : item.path);
+  });
+  return keys;
+};
+
 export const getMenuMatches = (flatMenuKeys, path) =>
   flatMenuKeys.filter(item => item && pathToRegexp(item).test(path));
 
 export default class BaseMenu extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.flatMenuKeys = this.getFlatMenuKeys(props.menuData);
+  state = {
+    flatMenuKeys: [],
+    menuDataNums: 0,
+  };
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.menuData.length !== prevState.menuDataNums) {
+      return {
+        flatMenuKeys: getFlatMenuKeys(nextProps.menuData),
+        menuDataNums: nextProps.menuData.length,
+      };
+    }
+    return null;
   }
 
   /**
@@ -42,7 +68,7 @@ export default class BaseMenu extends PureComponent {
       if (item.children) {
         keys = keys.concat(this.getFlatMenuKeys(item.children));
       }
-      keys.push(item.path);
+      keys.push(item.path.indexOf('#') > -1 ? item.path.split('#')[1] : item.path);
     });
     return keys;
   }
@@ -70,7 +96,8 @@ export default class BaseMenu extends PureComponent {
     const {
       location: { pathname },
     } = this.props;
-    return urlToList(pathname).map(itemPath => getMenuMatches(this.flatMenuKeys, itemPath).pop());
+    const { flatMenuKeys } = this.state;
+    return urlToList(pathname).map(itemPath => getMenuMatches(flatMenuKeys, itemPath).pop());
   };
 
   /**
@@ -80,7 +107,7 @@ export default class BaseMenu extends PureComponent {
     // doc: add hideChildrenInMenu
     if (item.children && !item.hideChildrenInMenu && item.children.some(child => child.name)) {
       // const name = formatMessage({ id: item.locale });
-      const name = item.name;
+      const { name } = item;
       return (
         <SubMenu
           title={
@@ -99,7 +126,11 @@ export default class BaseMenu extends PureComponent {
         </SubMenu>
       );
     }
-    return <Menu.Item key={item.path}>{this.getMenuItemPath(item)}</Menu.Item>;
+    return (
+      <Menu.Item key={item.path.indexOf('#') > -1 ? item.path.split('#')[1] : item.path}>
+        {this.getMenuItemPath(item)}
+      </Menu.Item>
+    );
   };
 
   /**
@@ -109,7 +140,7 @@ export default class BaseMenu extends PureComponent {
    */
   getMenuItemPath = item => {
     // const name = formatMessage({ id: item.locale });
-    const name = item.name;
+    const { name } = item;
     const itemPath = this.conversionPath(item.path);
     const icon = getIcon(item.icon);
     const { target } = item;

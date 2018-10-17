@@ -13,7 +13,7 @@ const getFlatMenuKeys = menuData => {
     if (item.children) {
       keys = keys.concat(getFlatMenuKeys(item.children));
     }
-    keys.push(item.path);
+    keys.push(item.path.indexOf('#') > -1 ? item.path.split('#')[1] : item.path);
   });
   return keys;
 };
