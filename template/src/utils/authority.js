@@ -1,12 +1,8 @@
 import { checkAuthority } from '@/utils/routerUtils';
 
-// use localStorage to store the authority info, which might be sent from server in actual project.
-export function getAuthority(str) {
-  console.log(checkAuthority());
+/**
+ * 根据 cookie 返回权限
+ */
+export default function getAuthority() {
   return checkAuthority() ? ['admin'] : ['guest'];
-}
-
-export function setAuthority(authority) {
-  const proAuthority = typeof authority === 'string' ? [authority] : authority;
-  return localStorage.setItem('antd-pro-authority', JSON.stringify(proAuthority));
 }

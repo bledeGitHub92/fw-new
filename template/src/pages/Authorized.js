@@ -1,6 +1,6 @@
 import React from 'react';
 import RenderAuthorized from '@/components/Authorized';
-import { getAuthority } from '@/utils/authority';
+import getAuthority from '@/utils/authority';
 import Redirect from 'umi/redirect';
 
 const Authority = getAuthority();

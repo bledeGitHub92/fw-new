@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { Layout, Icon } from 'antd';
 import GlobalFooter from '@/components/GlobalFooter';
+import { COPYRIGHT } from '@/utils/const';
 
 const { Footer } = Layout;
 const FooterView = () => (
@@ -8,7 +9,7 @@ const FooterView = () => (
     <GlobalFooter
       copyright={
         <Fragment>
-          Copyright <Icon type="copyright" /> 2018 重庆霏微科技有限公司 渝ICP备17016156号-3
+          Copyright <Icon type="copyright" /> {COPYRIGHT}
         </Fragment>
       }
     />

@@ -8,15 +8,16 @@ import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
 import pathToRegexp from 'path-to-regexp';
 import { enquireScreen, unenquireScreen } from 'enquire-js';
-import { formatMessage } from 'umi/locale';
+// import { formatMessage } from 'umi/locale';
 import SiderMenu from '@/components/SiderMenu';
 import Authorized from '@/utils/Authorized';
 import SettingDrawer from '@/components/SettingDrawer';
-import logo from '../assets/logo.svg';
+import logo from '../assets/logo.png';
 import Footer from './Footer';
 import Header from './Header';
 import Context from './MenuContext';
 import Exception403 from '../pages/Exception/403';
+import { TITLE } from '../utils/const';
 
 const { Content } = Layout;
 
@@ -95,7 +96,7 @@ class BasicLayout extends React.PureComponent {
     });
     dispatch({
       type: 'global/fetchMenu',
-    })
+    });
     this.renderRef = requestAnimationFrame(() => {
       this.setState({
         rendering: false,
@@ -168,18 +169,10 @@ class BasicLayout extends React.PureComponent {
     return this.breadcrumbNameMap[pathKey];
   };
 
-  getPageTitle = pathname => {
-    const currRouterData = this.matchParamsPath(pathname);
-
-    if (!currRouterData) {
-      return 'Ant Design Pro';
-    }
-    const message = formatMessage({
-      id: currRouterData.locale || currRouterData.name,
-      defaultMessage: currRouterData.name,
-    });
-    return `${message} - Ant Design Pro`;
-  };
+  /**
+   * @param pathname
+   */
+  getPageTitle = () => TITLE;
 
   getLayoutStyle = () => {
     const { isMobile } = this.state;
