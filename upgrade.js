@@ -17,6 +17,7 @@ var spinner = ora();
 
 var ownPath = __dirname;
 var overrideDirs = [
+  'interface',
   'components',
   'e2e',
   'layouts',
