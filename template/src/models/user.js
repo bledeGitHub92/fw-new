@@ -14,7 +14,7 @@ export default {
   },
 
   effects: {
-    *login(action, { call, put }) {
+    *login (action, { call, put }) {
       const shopId = localStorage.getItem('shopId');
       const { payload } = action;
       if (shopId && !(payload && payload.shopId)) {
@@ -40,7 +40,7 @@ export default {
       }
     },
 
-    *logout(_, { call, put, select }) {
+    *logout (_, { call, put, select }) {
       const pathname = yield select(state => state.routing.location.pathname);
 
       try {
@@ -58,8 +58,8 @@ export default {
       }
     },
 
-    *fetchUser({ payload }, { call, put }) {
-      const user = yield call(getUserInfo, payload);
+    *fetchUser ({ payload }, { call, put }) {
+      const { data: user } = yield call(getUserInfo, payload);
       yield put({
         type: 'setCurrentUser',
         payload: user,
@@ -68,7 +68,7 @@ export default {
   },
 
   reducers: {
-    setCurrentUser(state, { payload }) {
+    setCurrentUser (state, { payload }) {
       return {
         ...state,
         currentUser: payload || {},

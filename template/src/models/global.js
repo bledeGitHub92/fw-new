@@ -12,8 +12,8 @@ export default {
 
   effects: {
     /* 获取菜单 */
-    *fetchMenu(_, { call, put }) {
-      const menus = yield call(getMenusInfo);
+    *fetchMenu (_, { call, put }) {
+      const { data: menus } = yield call(getMenusInfo);
       yield put({
         type: 'setMenu',
         payload: getMenuData(menus),
@@ -21,8 +21,8 @@ export default {
     },
 
     /* 获取商铺列表 */
-    *fetchShop({ payload }, { call, put }) {
-      const shops = yield call(getShopInfo, payload);
+    *fetchShop ({ payload }, { call, put }) {
+      const { data: shops } = yield call(getShopInfo, payload);
 
       yield put({
         type: 'setShopList',
@@ -30,7 +30,7 @@ export default {
       });
     },
     /* 切换门店 */
-    *switch({ payload }, { call, put }) {
+    *switch ({ payload }, { call, put }) {
       if (payload.shopId) {
         localStorage.setItem('shopId', payload.shopId);
       }
@@ -44,19 +44,19 @@ export default {
   },
 
   reducers: {
-    changeLayoutCollapsed(state, { payload }) {
+    changeLayoutCollapsed (state, { payload }) {
       return {
         ...state,
         collapsed: payload,
       };
     },
-    setMenu(state, { payload }) {
+    setMenu (state, { payload }) {
       return {
         ...state,
         menus: payload,
       };
     },
-    setShopList(state, { payload }) {
+    setShopList (state, { payload }) {
       return {
         ...state,
         shops: payload,
@@ -65,7 +65,7 @@ export default {
   },
 
   subscriptions: {
-    setup({ history }) {
+    setup ({ history }) {
       // Subscribe history(url) change, trigger `load` action if pathname is `/`
       return history.listen(({ pathname, search }) => {
         if (typeof window.ga !== 'undefined') {
