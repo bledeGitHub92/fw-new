@@ -1,9 +1,3 @@
-/**
- * @var ownPath 模板路径
- * @var root 项目路径
- * @var overrideDirs 更新覆盖目录
- */
-
 var inquirer = require('inquirer');
 var fs = require('fs-extra');
 var path = require('path');
@@ -15,7 +9,14 @@ var spawn = require('cross-spawn');
 
 var spinner = ora();
 
+/**
+ * @desc 模板路径
+ */
 var ownPath = __dirname;
+
+/**
+ * @desc 待覆盖目录
+ */
 var overrideDirs = [
   'interface',
   'components',
@@ -29,9 +30,17 @@ var overrideDirs = [
   'assets',
   'defaultSettings.js',
   'global.less',
+];
+
+/**
+ * @desc 待清空路径
+ */
+var emptyDirs = [
+  'components',
 ]
 
 function appUpgrade (projectName) {
+  // 项目路径
   var root = path.resolve(projectName);
   var oldPackagePath = path.resolve(root, 'package.json');
   var newPackagePath = path.resolve(ownPath, 'template', 'package.json')
@@ -57,10 +66,9 @@ function appUpgrade (projectName) {
           '请确认是否要将 ' +
           oldPackageFile.name +
           ' 升级到最新？\n' +
-          chalk.red('会覆盖一下目录或文件：\n') +
+          chalk.red('会覆盖以下目录或文件：\n') +
           chalk.green('  1. /src/services/\n') +
           chalk.green('  2. /src/models/\n') +
-          chalk.green('  3. /src/components/\n') +
           chalk.green('  4. /src/assets/\n') +
           chalk.green('  5. /src/e2e/\n') +
           chalk.green('  6. /src/layouts/\n') +
@@ -68,7 +76,9 @@ function appUpgrade (projectName) {
           chalk.green('  8. /src/pages/基础页面\n') +
           chalk.green('  9. /src/utils/基础文件\n') +
           chalk.green('  10. /src/defaultSettings.js\n') +
-          chalk.green('  11. /src/global.less\n'),
+          chalk.green('  11. /src/global.less\n') +
+          chalk.red('会先清空再覆盖以下目录或文件：\n') +
+          chalk.green('  3. /src/components/\n'),
         default: false
       }
     ])
@@ -100,6 +110,10 @@ function appUpgrade (projectName) {
           overrideDirs.forEach(file => {
             var src = path.resolve(ownPath, 'template/src', file);
             var dest = path.resolve(root, 'src', file);
+            // 清空存在于 emptyDirs 里的目录
+            if (emptyDirs.includes(file)) {
+              fs.emptyDirSync(dest);
+            }
             fs.copySync(src, dest);
             console.log(
               chalk.dim(dest + ' 已更新!')
