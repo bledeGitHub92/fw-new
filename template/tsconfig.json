@@ -7,6 +7,7 @@
     "jsx": "preserve",
     "esModuleInterop": true,
     "sourceMap": true,
+    "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]

@@ -8,6 +8,7 @@ export default {
       size: 'large',
       prefix: <Icon type="user" className={styles.prefixIcon} />,
       placeholder: 'admin',
+      autoFocus: true,
     },
     rules: [
       {

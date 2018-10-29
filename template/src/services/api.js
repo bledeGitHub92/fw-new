@@ -16,6 +16,6 @@ export function getShopInfo() {
  * @param {Object} params
  * @props {Int} shopId
  */
-export function switchUserShop(params) {
-  return http.get(`${HOST}/auth/switchUserShop?shopId=${params.shopId}`);
+export function switchUserAuth(params) {
+  return http.get(`${HOST}/auth/switchUserAuth?authId=${params.key}`);
 }

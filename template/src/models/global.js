@@ -1,4 +1,4 @@
-import { getMenusInfo, getShopInfo, switchUserShop } from '@/services/api';
+import { getMenusInfo, getShopInfo, switchUserAuth } from '@/services/api';
 import { getMenuData } from '@/utils/routerUtils';
 
 export default {
@@ -31,11 +31,11 @@ export default {
     },
     /* 切换门店 */
     *switch ({ payload }, { call, put }) {
-      if (payload.shopId) {
-        localStorage.setItem('shopId', payload.shopId);
+      if (payload.key) {
+        localStorage.setItem('authId', payload.key);
       }
 
-      yield call(switchUserShop, payload);
+      yield call(switchUserAuth, payload);
 
       // 重新请求
       yield put({ type: 'fetchMenu' });

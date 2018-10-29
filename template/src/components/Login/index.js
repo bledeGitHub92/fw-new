@@ -81,6 +81,12 @@ class Login extends Component {
     });
   };
 
+  handleEnterPress = (e) => {
+    if (e.key.toLowerCase() === 'enter') {
+      this.handleSubmit(e);
+    }
+  }
+
   render() {
     const { className, children } = this.props;
     const { type, tabs } = this.state;
@@ -99,7 +105,7 @@ class Login extends Component {
     });
     return (
       <LoginContext.Provider value={this.getContext()}>
-        <div className={classNames(className, styles.login)}>
+        <div dataindex='-1' onKeyPress={this.handleEnterPress} className={classNames(className, styles.login)}>
           <Form onSubmit={this.handleSubmit}>
             {tabs.length ? (
               <React.Fragment>

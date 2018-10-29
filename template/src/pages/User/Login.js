@@ -49,12 +49,6 @@ class LoginPage extends Component {
           ...values,
           type,
         },
-        success: () => {
-          message.info('登录成功！');
-        },
-        error: (msg) => {
-          msg && message.error(msg);
-        }
       });
     }
   };
@@ -69,7 +63,7 @@ class LoginPage extends Component {
     <Alert style={{ marginBottom: 24 }} message={content} type="error" showIcon />
   );
 
-  render() {
+  render () {
     const user = {};
     const { login, submitting } = this.props;
     const { type, autoLogin } = this.state;
@@ -82,7 +76,7 @@ class LoginPage extends Component {
         backgroundPositionX: 'center',
         backgroundPositionY: '36%',
       }
-    };    
+    };
     return (
       <div>
         <div className={styles.header}>
@@ -118,7 +112,7 @@ class LoginPage extends Component {
                 <UserName name="account" placeholder="请输入您的账号" />
                 <Password name="password" placeholder="请输入您的密码" />
               </Tab>
-              <Tab key="mobile" tab="手机号登录">
+              {/* <Tab key="mobile" tab="手机号登录">
                 {
                   user.status === 'error' &&
                   user.type === 'mobile' &&
@@ -127,7 +121,7 @@ class LoginPage extends Component {
                 }
                 <Mobile name="mobile" />
                 <Captcha name="captcha" />
-              </Tab>
+              </Tab> */}
               <div>
                 <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>自动登录</Checkbox>
                 <Link style={{ float: 'right' }} to="/user/forget-password">忘记密码？</Link>
