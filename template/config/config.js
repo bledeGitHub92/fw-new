@@ -19,9 +19,13 @@ export default {
           default: 'zh-CN', // default zh-CN
           baseNavigator: true, // default true, when it is true, will use `navigator.language` overwrite default
         },
-        dynamicImport: {
-          loadingComponent: './components/PageLoading/index',
-        },
+        /**
+         * @desc 禁用代码分割
+         * 
+         dynamicImport: {
+           loadingComponent: './components/PageLoading/index',
+          },
+        */
         polyfills: ['ie11'],
         ...(!process.env.TEST && os.platform() === 'darwin'
           ? {
