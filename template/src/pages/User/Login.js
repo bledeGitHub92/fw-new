@@ -66,7 +66,7 @@ class LoginPage extends Component {
         });
         const { hostname } = location;
         const isNoPower = menus.length === 0;
-        const hasCurrHost = menus.some(({ domain }) => domain === hostname);
+        const CurrHost = menus.find(({ domain }) => domain === hostname);
 
         if (isNoPower) {
           message.info('请向管理员索取权限!');
@@ -74,8 +74,8 @@ class LoginPage extends Component {
         }
 
         message.info('登录成功！', 1, () => {
-          if (hasCurrHost) {
-            dispatch(routerRedux.push(`/${menus[0].path + '/' + menus[0].children[0].path}`));
+          if (CurrHost) {
+            dispatch(routerRedux.push(`/${CurrHost.path + '/' + CurrHost.children[0].path}`));
           } else {
             location.href = `http://${menus[0].domain}/#/${menus[0].path + '/' + menus[0].children[0].path}`;
           }

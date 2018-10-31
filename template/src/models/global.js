@@ -44,7 +44,6 @@ export default {
       yield put(routerRedux.push('/'));
 
       // 重新请求
-      yield put({ type: 'fetchMenu' });
       yield put({ type: 'fetchShop' });
     },
   },

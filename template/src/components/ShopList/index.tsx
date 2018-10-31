@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { Menu, Avatar, Icon, Spin } from 'antd';
 import { common } from '@/interface/common';
 import ShopListTypes from './interface';
+import { routerRedux } from 'dva/router';
 
 import Shops = ShopListTypes.Shops;
 
@@ -36,15 +37,27 @@ class ShopList extends Component<Props> {
     }
   }
 
-  handleItemClick = ({ key }) => {
+  handleItemClick = async ({ key }) => {
     if (!key) return;
 
     const { dispatch } = this.injected;
 
-    dispatch({
+    await dispatch({
       type: 'global/switch',
       payload: { key },
     });
+
+    const menus = await dispatch({
+      type: 'global/fetchMenu',
+    });
+    const { hostname } = location;
+    const CurrHost = menus.find(({ domain }) => domain === hostname);
+
+    if (CurrHost) {
+      dispatch(routerRedux.push(`/${CurrHost.path + '/' + CurrHost.children[0].path}`));
+    } else {
+      location.href = `http://${menus[0].domain}/#/${menus[0].path + '/' + menus[0].children[0].path}`;
+    }
   };
 
   render () {
