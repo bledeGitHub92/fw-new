@@ -18,26 +18,21 @@ var ownPath = __dirname;
  * @desc 待覆盖目录
  */
 var overrideDirs = [
-  'interface',
-  'components',
-  'e2e',
-  'layouts',
-  'locales',
-  'services',
-  'models',
-  'pages',
-  'utils',
-  'assets',
-  'defaultSettings.js',
-  'global.less',
+  'src/interface',
+  'src/components',
+  'src/e2e',
+  'src/layouts',
+  'src/locales',
+  'src/services',
+  'src/models',
+  'src/pages',
+  'src/utils',
+  'src/assets',
+  'src/defaultSettings.js',
+  'src/global.less',
+  'config/config.js',
+  'config/plugin.config.js',
 ];
-
-/**
- * @desc 待清空路径
- */
-var emptyDirs = [
-  'components',
-]
 
 function appUpgrade (projectName) {
   // 项目路径
@@ -77,8 +72,8 @@ function appUpgrade (projectName) {
           chalk.green('  9. /src/utils/基础文件\n') +
           chalk.green('  10. /src/defaultSettings.js\n') +
           chalk.green('  11. /src/global.less\n') +
-          chalk.red('会先清空再覆盖以下目录或文件：\n') +
-          chalk.green('  3. /src/components/\n'),
+          chalk.green('  12. /config/config.js\n') +
+          chalk.green('  13. /config/plugin.config.js\n'),
         default: false
       }
     ])
@@ -108,12 +103,8 @@ function appUpgrade (projectName) {
           fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify(newPackageFile, null, 2));
           // 更新 overrideDirs 里的文件
           overrideDirs.forEach(file => {
-            var src = path.resolve(ownPath, 'template/src', file);
-            var dest = path.resolve(root, 'src', file);
-            // 清空存在于 emptyDirs 里的目录
-            if (emptyDirs.includes(file)) {
-              fs.emptyDirSync(dest);
-            }
+            var src = path.resolve(ownPath, 'template', file);
+            var dest = path.resolve(root, file);
             fs.copySync(src, dest);
             console.log(
               chalk.dim(dest + ' 已更新!')

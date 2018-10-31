@@ -80,7 +80,7 @@ declare namespace common {
     /**
      * 总页数
      */
-    totle: number,
+    total: number,
 
     /**
      * 单位

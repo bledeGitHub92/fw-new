@@ -1,5 +1,6 @@
 import { getMenusInfo, getShopInfo, switchUserAuth } from '@/services/api';
 import { getMenuData } from '@/utils/routerUtils';
+import { routerRedux } from 'dva/router';
 
 export default {
   namespace: 'global',
@@ -36,6 +37,7 @@ export default {
       }
 
       yield call(switchUserAuth, payload);
+      yield put(routerRedux.push('/'));
 
       // 重新请求
       yield put({ type: 'fetchMenu' });

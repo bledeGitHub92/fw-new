@@ -16,7 +16,7 @@ const updateTheme = primaryColor => {
     return;
   }
   const hideMessage = message.loading('正在编译主题！', 0);
-  function buildIt() {
+  function buildIt () {
     if (!window.less) {
       return;
     }
@@ -71,7 +71,7 @@ export default {
   namespace: 'setting',
   state: defaultSettings,
   reducers: {
-    getSetting(state) {
+    getSetting (state) {
       const setting = {};
       const urlParams = new URL(window.location.href);
       Object.keys(state).forEach(key => {
@@ -90,7 +90,7 @@ export default {
         ...setting,
       };
     },
-    changeSetting(state, { payload }) {
+    changeSetting (state, { payload }) {
       const urlParams = new URL(window.location.href);
       Object.keys(defaultSettings).forEach(key => {
         if (urlParams.searchParams.has(key)) {

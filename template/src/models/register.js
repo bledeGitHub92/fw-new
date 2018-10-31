@@ -9,8 +9,8 @@ export default {
   },
 
   effects: {
-    *submit({ payload }, { call, put }) {
-      const response = yield call(fakeRegister, payload);
+    *submit ({ payload }, { call, put }) {
+      const { data: response } = yield call(fakeRegister, payload);
       yield put({
         type: 'registerHandle',
         payload: response,
@@ -19,7 +19,7 @@ export default {
   },
 
   reducers: {
-    registerHandle(state, { payload }) {
+    registerHandle (state, { payload }) {
       reloadAuthorized();
       return {
         ...state,
