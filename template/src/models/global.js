@@ -14,12 +14,15 @@ export default {
   effects: {
     /* 获取菜单 */
     *fetchMenu (_, { call, put }) {
-      const { data: menus } = yield call(getMenusInfo);
-      yield put({
-        type: 'setMenu',
-        payload: getMenuData(menus),
-      });
-      return menus;
+      try {
+        const { data: menus } = yield call(getMenusInfo);
+        yield put({
+          type: 'setMenu',
+          payload: getMenuData(menus),
+        });
+        return menus;
+      } catch (e) {
+      }
     },
 
     /* 获取商铺列表 */
