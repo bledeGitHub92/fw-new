@@ -4,7 +4,6 @@
   "description": "An out-of-box UI solution for enterprise applications",
   "private": true,
   "scripts": {
-    "precommit": "npm run lint-staged",
     "presite": "npm run generate-mock && cd functions && npm install",
     "start": "cross-env APP_TYPE=site HOST=devlocal.feewee.cn umi dev",
     "start:no-mock": "cross-env MOCK=none HOST=devlocal.feewee.cn umi dev",
@@ -48,6 +47,7 @@
     "react-container-query": "^0.11.0",
     "react-copy-to-clipboard": "^5.0.1",
     "react-document-title": "^2.0.3",
+    "react-bmap": "1.0.84",
     "react-dom": "^16.5.1",
     "react-fittext": "^1.0.0",
     "react-router-dom": "^4.3.1"

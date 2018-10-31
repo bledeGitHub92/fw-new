@@ -49,13 +49,18 @@ class LoginPage extends Component {
         this.setState({
           submitting: true,
         });
-        await dispatch({
+        const isAuth = await dispatch({
           type: 'user/login',
           payload: {
             ...values,
             type,
           },
         });
+
+        if (!isAuth) {
+          throw new Error('登录失败');
+        }
+        
         const menus = await dispatch({
           type: 'global/fetchMenu',
         });
@@ -70,19 +75,21 @@ class LoginPage extends Component {
 
         message.info('登录成功！', 1, () => {
           if (hasCurrHost) {
-            dispatch(routerRedux.push('/'));
+            dispatch(routerRedux.push(`/${menus[0].path + '/' + menus[0].children[0].path}`));
           } else {
-            location.href = `http://${menus[0].domain}`;
+            location.href = `http://${menus[0].domain}/#/${menus[0].path + '/' + menus[0].children[0].path}`;
           }
           this.setState({
             submitting: false,
           });
         });
       }
-    } catch (e) {
+    } catch(e) {
+      console.log(e.message);
+    } finally {
       this.setState({
         submitting: false,
-      });
+      })
     }
   };
 
