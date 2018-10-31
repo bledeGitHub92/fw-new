@@ -22,8 +22,6 @@ export default {
 
         yield call(userLogin, payload);
         reloadAuthorized();
-        message.info('登录成功！');
-        yield put(routerRedux.push('/'));
       } catch (e) {
         message.error(e.message);
       }

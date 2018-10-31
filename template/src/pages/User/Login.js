@@ -6,17 +6,18 @@ import Login from '@/components/Login';
 import styles from './Login.less';
 import logo from '@/assets/logo.png';
 import loginBg from '@/assets/login_bg.png';
+import { routerRedux } from 'dva/router';
 
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
 
-@connect(({ login, loading }) => ({
+@connect(({ login }) => ({
   login,
-  submitting: loading.effects['user/login'],
 }))
 class LoginPage extends Component {
   state = {
     type: 'account',
     autoLogin: true,
+    submitting: false,
   };
 
   onTabChange = type => {
@@ -40,15 +41,47 @@ class LoginPage extends Component {
       });
     });
 
-  handleSubmit = (err, values) => {
-    const { type } = this.state;
-    if (!err) {
-      this.props.dispatch({
-        type: 'user/login',
-        payload: {
-          ...values,
-          type,
-        },
+  handleSubmit = async (err, values) => {
+    try {
+      const { dispatch } = this.props;
+      const { type } = this.state;
+      if (!err) {
+        this.setState({
+          submitting: true,
+        });
+        await dispatch({
+          type: 'user/login',
+          payload: {
+            ...values,
+            type,
+          },
+        });
+        const menus = await dispatch({
+          type: 'global/fetchMenu',
+        });
+        const { hostname } = location;
+        const isNoPower = menus.length === 0;
+        const hasCurrHost = menus.some(({ domain }) => domain === hostname);
+
+        if (isNoPower) {
+          message.info('请向管理员索取权限!');
+          return;
+        }
+
+        message.info('登录成功！', 1, () => {
+          if (hasCurrHost) {
+            dispatch(routerRedux.push('/'));
+          } else {
+            location.href = `http://${menus[0].domain}`;
+          }
+          this.setState({
+            submitting: false,
+          });
+        });
+      }
+    } catch (e) {
+      this.setState({
+        submitting: false,
       });
     }
   };
@@ -65,8 +98,8 @@ class LoginPage extends Component {
 
   render () {
     const user = {};
-    const { login, submitting } = this.props;
-    const { type, autoLogin } = this.state;
+    const { login } = this.props;
+    const { type, autoLogin, submitting, } = this.state;
     const style = {
       bg: {
         background: `url(${loginBg})`,

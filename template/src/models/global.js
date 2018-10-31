@@ -19,6 +19,7 @@ export default {
         type: 'setMenu',
         payload: getMenuData(menus),
       });
+      return menus;
     },
 
     /* 获取商铺列表 */
