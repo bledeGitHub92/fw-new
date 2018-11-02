@@ -60,36 +60,13 @@ class LoginPage extends Component {
         if (!isAuth) {
           throw new Error('登录失败');
         }
-        
-        const menus = await dispatch({
-          type: 'global/fetchMenu',
-        });
-        const { hostname } = location;
-        const isNoPower = menus.length === 0;
-        const CurrHost = menus.find(({ domain }) => domain === hostname);
 
-        if (isNoPower) {
-          message.info('请向管理员索取权限!');
-          return;
-        }
-
-        message.info('登录成功！', 1, () => {
-          if (CurrHost) {
-            dispatch(routerRedux.push(`/${CurrHost.path + '/' + CurrHost.children[0].path}`));
-          } else {
-            location.href = `http://${menus[0].domain}/#/${menus[0].path + '/' + menus[0].children[0].path}`;
-          }
-          this.setState({
-            submitting: false,
-          });
-        });
+        dispatch(routerRedux.push('/'));
       }
-    } catch(e) {
-      console.log(e.message);
-    } finally {
+    } catch (e) {
       this.setState({
         submitting: false,
-      })
+      });
     }
   };
 
@@ -135,12 +112,12 @@ class LoginPage extends Component {
           </div>
         </div>
         <div className={styles.loginWrapper} style={style.bg}>
-          { /* <img className={styles.backImg} src={loginBg} alt="img" /> */}
           <div className={styles.main}>
             <Login
               defaultActiveKey={type}
               onTabChange={this.onTabChange}
               onSubmit={this.handleSubmit}
+              submitting={submitting}
             >
               <Tab key="account" tab="账户密码登录">
                 {
@@ -152,16 +129,6 @@ class LoginPage extends Component {
                 <UserName name="account" placeholder="请输入您的账号" />
                 <Password name="password" placeholder="请输入您的密码" />
               </Tab>
-              {/* <Tab key="mobile" tab="手机号登录">
-                {
-                  user.status === 'error' &&
-                  user.type === 'mobile' &&
-                  !user.submitting &&
-                  this.renderMessage('验证码错误')
-                }
-                <Mobile name="mobile" />
-                <Captcha name="captcha" />
-              </Tab> */}
               <div>
                 <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>自动登录</Checkbox>
                 <Link style={{ float: 'right' }} to="/user/forget-password">忘记密码？</Link>

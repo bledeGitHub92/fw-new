@@ -19,13 +19,6 @@ export default {
           default: 'zh-CN', // default zh-CN
           baseNavigator: true, // default true, when it is true, will use `navigator.language` overwrite default
         },
-        /**
-         * @desc 禁用代码分割
-         * 
-         dynamicImport: {
-           loadingComponent: './components/PageLoading/index',
-          },
-        */
         polyfills: ['ie11'],
         ...(!process.env.TEST && os.platform() === 'darwin'
           ? {
@@ -103,6 +96,7 @@ export default {
   cssnano: {
     mergeRules: false,
   },
+  hash: true,
   history: 'hash',
   proxy: {
     "/api": {
@@ -110,21 +104,5 @@ export default {
       "changeOrigin": true,
       "pathRewrite": { "^/api": "" }
     },
-    // for Mr. Wang
-    "/wh": {
-      "target": "http://192.168.0.126:8080",
-      "changeOrigin": true,
-      "pathRewrite": { "^/wang": "" }
-    },
-    // for Miss. Tang
-    "/tmz": {
-      "target": "http://192.168.0.119:8080",
-      "changeOrigin": true,
-      "pathRewrite": { "^/tang": "" }
-    },
-    "/admin": {
-      "target": "http://devgate.feewee.cn",
-      "changeOrigin": true
-    }
   }
 };

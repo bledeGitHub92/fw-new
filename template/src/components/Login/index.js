@@ -14,16 +14,17 @@ class Login extends Component {
     defaultActiveKey: PropTypes.string,
     onTabChange: PropTypes.func,
     onSubmit: PropTypes.func,
+    submitting: PropTypes.bool,
   };
 
   static defaultProps = {
     className: '',
     defaultActiveKey: '',
-    onTabChange: () => {},
-    onSubmit: () => {},
+    onTabChange: () => { },
+    onSubmit: () => { },
   };
 
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       type: props.defaultActiveKey,
@@ -82,12 +83,12 @@ class Login extends Component {
   };
 
   handleEnterPress = (e) => {
-    if (e.key.toLowerCase() === 'enter') {
+    if (e.key.toLowerCase() === 'enter' && !this.props.submitting) {
       this.handleSubmit(e);
     }
   }
 
-  render() {
+  render () {
     const { className, children } = this.props;
     const { type, tabs } = this.state;
     const TabChildren = [];
@@ -120,8 +121,8 @@ class Login extends Component {
                 {otherChildren}
               </React.Fragment>
             ) : (
-              [...children]
-            )}
+                [...children]
+              )}
           </Form>
         </div>
       </LoginContext.Provider>

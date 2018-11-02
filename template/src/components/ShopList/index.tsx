@@ -47,11 +47,12 @@ class ShopList extends Component<Props> {
       payload: { key },
     });
 
-    const menus = await dispatch({
-      type: 'global/fetchMenu',
-    });
-    const { hostname } = location;
+    const isDev = process.env.NODE_ENV === 'development';
+    const DEV_HOST = process.env.DEV_HOST;
+    const menus = await dispatch({ type: 'global/fetchMenu', });
+    const hostname = isDev ? DEV_HOST : window.location.hostname;
     const CurrHost = menus.find(({ domain }) => domain === hostname);
+
 
     if (CurrHost) {
       dispatch(routerRedux.push(`/${CurrHost.path + '/' + CurrHost.children[0].path}`));
