@@ -19,8 +19,8 @@ export default {
           type: 'setMenu',
           payload: getMenuData(menus),
         });
-        return menus;
       } catch (e) {
+        message.error(e.message);
       }
     },
 
@@ -41,8 +41,7 @@ export default {
 
       yield call(switchUserAuth, payload);
 
-      // 重新请求
-      yield put({ type: 'fetchShop' });
+      window.location.reload();
     },
   },
 

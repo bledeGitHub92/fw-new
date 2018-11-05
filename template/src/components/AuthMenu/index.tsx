@@ -5,6 +5,7 @@ import { routerRedux } from 'dva/router';
 import { reloadAuthorized } from '@/utils/Authorized';
 import { removeAuthority } from '@/utils/routerUtils';
 import { message } from 'antd';
+import PageLoading from '@/components/PageLoading';
 import Redirect from 'umi/redirect';
 
 interface Injected extends common.ConnectProps, Props<undefined> {
@@ -13,12 +14,11 @@ interface Injected extends common.ConnectProps, Props<undefined> {
 
 interface State {
   next: boolean;
-  isNotFound: Boolean;
-  menus: any[];
-  prevPath: string;
 }
 
-@connect()
+@connect(({ global }) => ({
+  menus: global.menus,
+}))
 class AuthMenu extends Component {
   get injected () {
     return this.props as Injected;
@@ -26,19 +26,19 @@ class AuthMenu extends Component {
 
   state: State = {
     next: false,
-    isNotFound: false,
-    menus: [],
-    prevPath: '',
   }
 
-  async componentDidMount () {
+  componentDidMount () {
     const { dispatch } = this.injected;
 
-    const menus = await dispatch({ type: 'global/fetchMenu' });
-    this.setState({
-      menus,
-    });
-    this.getNextRoute(menus);
+    dispatch({ type: 'global/fetchMenu' });
+  }
+
+  componentDidUpdate (prevProps, prevState) {
+    if (prevProps.menus !== this.injected.menus) {
+      this.setState({ next: false, });
+      this.getNextRoute(this.injected.menus);
+    }
   }
 
   getNextRoute (menus) {
@@ -61,25 +61,21 @@ class AuthMenu extends Component {
 
     this.setState({
       next: true,
-      prevPath: `/${CurrHost.path + '/' + CurrHost.children[0].path}`,
     });
-
 
     if (!isNotFound) return;
 
-    if (CurrHost) {
-      dispatch(routerRedux.replace(`/${CurrHost.path + '/' + CurrHost.children[0].path}`));
-    } else {
-      window.location.href = `http://${menus[0].domain}/#/${menus[0].path + '/' + menus[0].children[0].path}`;
-    }
+    window.location.href = CurrHost ? CurrHost.children[0].path : menus[0].children[0].path;
   }
 
   render () {
     const { next, } = this.state;
 
+    if (!next) { return <PageLoading /> }
+
     return (
       <>
-        {next && this.injected.children}
+        {this.injected.children}
       </>
     )
   }

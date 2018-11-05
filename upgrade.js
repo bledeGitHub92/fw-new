@@ -32,6 +32,7 @@ var overrideDirs = [
   'src/global.less',
   'config/config.js',
   'config/plugin.config.js',
+  'tsconfig.json',
 ];
 
 function appUpgrade (projectName) {
@@ -62,18 +63,19 @@ function appUpgrade (projectName) {
           oldPackageFile.name +
           ' 升级到最新？\n' +
           chalk.red('会覆盖以下目录或文件：\n') +
-          chalk.green('  1. /src/services/\n') +
-          chalk.green('  2. /src/models/\n') +
-          chalk.green('  4. /src/assets/\n') +
-          chalk.green('  5. /src/e2e/\n') +
-          chalk.green('  6. /src/layouts/\n') +
-          chalk.green('  7. /src/locales/\n') +
-          chalk.green('  8. /src/pages/基础页面\n') +
-          chalk.green('  9. /src/utils/基础文件\n') +
-          chalk.green('  10. /src/defaultSettings.js\n') +
-          chalk.green('  11. /src/global.less\n') +
-          chalk.green('  12. /config/config.js\n') +
-          chalk.green('  13. /config/plugin.config.js\n'),
+          chalk.green('  /src/services/\n') +
+          chalk.green('  /src/models/\n') +
+          chalk.green('  /src/assets/\n') +
+          chalk.green('  /src/e2e/\n') +
+          chalk.green('  /src/layouts/\n') +
+          chalk.green('  /src/locales/\n') +
+          chalk.green('  /src/pages/基础页面\n') +
+          chalk.green('  /src/utils/基础文件\n') +
+          chalk.green('  /src/defaultSettings.js\n') +
+          chalk.green('  /src/global.less\n') +
+          chalk.green('  /config/config.js\n') +
+          chalk.green('  /config/plugin.config.js\n') +
+          chalk.green('  /tsconfig.json\n'),
         default: false
       }
     ])

@@ -37,28 +37,14 @@ class ShopList extends Component<Props> {
     }
   }
 
-  handleItemClick = async ({ key }) => {
+  handleItemClick = ({ key }) => {
     if (!key) return;
-
     const { dispatch } = this.injected;
 
-    await dispatch({
+    dispatch({
       type: 'global/switch',
       payload: { key },
     });
-
-    const isDev = process.env.NODE_ENV === 'development';
-    const DEV_HOST = process.env.DEV_HOST;
-    const menus = await dispatch({ type: 'global/fetchMenu', });
-    const hostname = isDev ? DEV_HOST : window.location.hostname;
-    const CurrHost = menus.find(({ domain }) => domain === hostname);
-
-
-    if (CurrHost) {
-      dispatch(routerRedux.push(`/${CurrHost.path + '/' + CurrHost.children[0].path}`));
-    } else {
-      location.href = `http://${menus[0].domain}/#/${menus[0].path + '/' + menus[0].children[0].path}`;
-    }
   };
 
   render () {

@@ -3,7 +3,6 @@ import { reloadAuthorized } from '@/utils/Authorized';
 import { removeAuthority } from '@/utils/routerUtils';
 import { message } from 'antd';
 import { login as userLogin, getUserInfo, logout as userLogout } from '@/services/user';
-import { codeBlock } from 'common-tags';
 
 export default {
   namespace: 'user',
