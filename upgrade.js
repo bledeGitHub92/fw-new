@@ -33,6 +33,7 @@ var overrideDirs = [
   'config/config.js',
   'config/plugin.config.js',
   'tsconfig.json',
+  '.eslintrc.js',
 ];
 
 function appUpgrade (projectName) {
@@ -75,7 +76,8 @@ function appUpgrade (projectName) {
           chalk.green('  /src/global.less\n') +
           chalk.green('  /config/config.js\n') +
           chalk.green('  /config/plugin.config.js\n') +
-          chalk.green('  /tsconfig.json\n'),
+          chalk.green('  /tsconfig.json\n') +
+          chalk.green('  /.eslintrc.js\n'),
         default: false
       }
     ])

@@ -2,11 +2,7 @@ import React, { Props, Component } from 'react';
 import { connect } from 'dva';
 import { common } from '@/interface/common';
 import { routerRedux } from 'dva/router';
-import { reloadAuthorized } from '@/utils/Authorized';
-import { removeAuthority } from '@/utils/routerUtils';
-import { message } from 'antd';
 import PageLoading from '@/components/PageLoading';
-import Redirect from 'umi/redirect';
 
 interface Injected extends common.ConnectProps, Props<undefined> {
   menus: any[];
@@ -52,16 +48,14 @@ class AuthMenu extends Component {
     });
     const CurrHost = menus.find(({ domain }) => domain === hostname);
 
-    if (isNoPower) {
-      message.info('请向管理员索取权限!');
-      removeAuthority();
-      reloadAuthorized();
-      dispatch(routerRedux.push('/'));
-    }
-
     this.setState({
       next: true,
     });
+
+    if (isNoPower) {
+      return dispatch(routerRedux.replace('/403'));
+    }
+
 
     if (!isNotFound) return;
 
