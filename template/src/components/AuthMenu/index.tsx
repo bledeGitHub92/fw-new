@@ -46,7 +46,9 @@ class AuthMenu extends Component {
     const isNotFound = menus.every(({ path, children }) => {
       return children.every(({ path: childPath }) => `/${path}/${childPath}` !== location.pathname)
     });
-    const CurrHost = menus.find(({ domain }) => domain === hostname);
+    const currHost = menus.find(({ domain }) => domain === hostname);
+    const targetMenu = currHost.children.find(({ path }) => path.split('#')[1] === location.pathname);
+    const targetPath = targetMenu ? targetMenu.path : currHost.children[0].path;
 
     this.setState({
       next: true,
@@ -59,7 +61,7 @@ class AuthMenu extends Component {
 
     if (!isNotFound) return;
 
-    window.location.href = CurrHost ? CurrHost.children[0].path : menus[0].children[0].path;
+    window.location.href = currHost ? targetPath : menus[0].children[0].path;
   }
 
   render () {
