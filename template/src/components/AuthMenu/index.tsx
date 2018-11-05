@@ -47,8 +47,12 @@ class AuthMenu extends Component {
       return children.every(({ path: childPath }) => `/${path}/${childPath}` !== location.pathname)
     });
     const currHost = menus.find(({ domain }) => domain === hostname);
-    const targetMenu = currHost.children.find(({ path }) => path.split('#')[1] === location.pathname);
-    const targetPath = targetMenu ? targetMenu.path : currHost.children[0].path;
+    const targetMenu = currHost && currHost.children.find(({ path }) => path.split('#')[1] === location.pathname);
+    const targetPath = targetMenu
+      ? targetMenu.path
+      : currHost
+        ? currHost.children[0].path
+        : menus[0].children[0].path;
 
     this.setState({
       next: true,
