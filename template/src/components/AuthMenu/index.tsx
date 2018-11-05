@@ -65,7 +65,7 @@ class AuthMenu extends Component {
 
     if (!isNotFound) return;
 
-    window.location.href = currHost ? targetPath : menus[0].children[0].path;
+    window.location.href = targetPath;
   }
 
   render () {
