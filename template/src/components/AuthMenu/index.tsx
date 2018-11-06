@@ -43,16 +43,7 @@ class AuthMenu extends Component {
     const { dispatch, location } = this.injected
     const hostname = isDev ? DEV_HOST : window.location.hostname;
     const isNoPower = menus.length === 0;
-    const isNotFound = menus.every(({ path, children }) => {
-      return children.every(({ path: childPath }) => `/${path}/${childPath}` !== location.pathname)
-    });
     const currHost = menus.find(({ domain }) => domain === hostname);
-    const targetMenu = currHost && currHost.children.find(({ path }) => path.split('#')[1] === location.pathname);
-    const targetPath = targetMenu
-      ? targetMenu.path
-      : currHost
-        ? currHost.children[0].path
-        : menus[0].children[0].path;
 
     this.setState({
       next: true,
@@ -62,8 +53,12 @@ class AuthMenu extends Component {
       return dispatch(routerRedux.replace('/403'));
     }
 
-
-    if (!isNotFound) return;
+    const targetMenu = currHost && currHost.children.find(({ path }) => path.split('#')[1] === location.pathname);
+    const targetPath = targetMenu
+      ? targetMenu.path
+      : currHost
+        ? currHost.children[0].path
+        : menus[0].children[0].path;
 
     window.location.href = targetPath;
   }
