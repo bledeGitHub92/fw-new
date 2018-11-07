@@ -27,6 +27,8 @@
   "files": [
     "index.js",
     "upgrade.js",
-    "template"
+    "page.js",
+    "template",
+    "page"
   ]
 }
