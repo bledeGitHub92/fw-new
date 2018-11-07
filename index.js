@@ -30,6 +30,7 @@ var path = require('path');
 var execSync = require('child_process').execSync;
 var spawn = require('cross-spawn');
 var appUpgrade = require('./upgrade');
+var createPage = require('./page');
 
 var ownPath = __dirname;
 var oldPath = process.cwd();
@@ -40,7 +41,8 @@ var program = commander
   .version(require('./package.json').version)
   .arguments('<project-directory>')
   .usage(chalk.green('<project-directory>') + ' [options]')
-  .option('-u, --upgrade', '升级项目到tiger-new最新构建版本')
+  .option('-u, --upgrade', '升级项目到fw-new最新构建版本')
+  .option('-p --page', '创建页面模板')
   .action(function (name) {
     projectName = name;
   })
@@ -56,8 +58,13 @@ if (typeof projectName === 'undefined') {
   process.exit(1);
 }
 
+// 升级
 if (program.upgrade) {
   appUpgrade(projectName);
+  // 创建页面模板
+} else if (program.page) {
+  createPage(projectName);
+  // 创建新项目
 } else if (!isSafeToCreateProjectIn(path.resolve(projectName))) {
   spinner.fail('该文件夹（' + chalk.green(projectName) + '）已经存在，且存在导致冲突的文件.');
   console.log('  请使用一个新的文件夹名，或者使用升级命令将项目构建方式升级到最新版本：');
