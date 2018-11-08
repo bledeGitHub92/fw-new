@@ -105,4 +105,19 @@ declare namespace common {
     cancel: Function,
     [key: string]: any,
   }
+
+  /**
+   * 分页查询参数
+   */
+  interface PaginationParam<T> {
+    /**
+     * 当前页
+     */
+    current?: number | undefined;
+    /**
+     * 每页条数
+     */
+    pageSize?: number | undefined;
+    param?: T;
+  }
 }
