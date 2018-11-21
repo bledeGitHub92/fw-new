@@ -4,7 +4,7 @@ export default {
   ...config,
   define: {
     // 在此填写项目名
-    // 'process.env.DEV_HOST': generateHostanem(),
+    'process.env.DEV_HOST': generateHostanem(),
   },
 }
 
@@ -22,9 +22,9 @@ export default {
  *   ...
  * ]
  */
-function generateHostanem (projectName) {
-  if (!projectName) {
+function generateHostanem(projectName) {
+  if (typeof projectName !== 'string' || projectName === '') {
     throw new Error('请在 /config/config.local.js 填写项目名!');
   }
-  return `dev${projectName}.feewee.cn`
+  return `dev${projectName}.feewee.cn`;
 }

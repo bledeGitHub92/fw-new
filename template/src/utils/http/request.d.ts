@@ -1,4 +1,5 @@
 import { AxiosRequestConfig } from 'axios';
+import { common } from '@/interface/common';
 
 declare namespace iHttp {
   interface ServerResponse<T> {
@@ -46,6 +47,13 @@ declare namespace iHttp {
     errorMsg?: string,
     response?: any
   }
+
+  type PromiseResp<T> = Promise<ParseResult<T>>;
+
+  type PromiseRespa<T> = Promise<ParseResult<T[]>>;
+
+  type PromisePageResp<T> = Promise<ParseResult<common.Page<T>>>;
+  
 }
 
 export default iHttp;

@@ -4,15 +4,18 @@ import { common } from '@/interface/common';
 import { Card, } from 'antd';
 import { connect } from 'dva';
 
-interface State {
-}
 interface Injected extends common.ConnectProps {
+
+}
+
+interface State {
+
 }
 
 @connect(({ loading, }) => ({
 }))
-class Location extends PureComponent {
-  get injected () {
+class extends PureComponent {
+  get injected() {
     return this.props as Injected;
   }
 
@@ -36,10 +39,10 @@ class Location extends PureComponent {
    */
 
 
-  render () {
+  render() {
 
     return (
-      <PageHeaderWrapper title='库位管理'>
+      <PageHeaderWrapper title=''>
         <Card>
         </Card>
       </PageHeaderWrapper>
@@ -47,4 +50,4 @@ class Location extends PureComponent {
   }
 }
 
-export default Location;
+export default ;
