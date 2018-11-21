@@ -1,5 +1,6 @@
 import { getMenusInfo, getShopInfo, switchUserAuth } from '@/services/api';
 import { getMenuData } from '@/utils/routerUtils';
+import { message } from 'antd';
 
 export default {
   namespace: 'global',
@@ -12,7 +13,7 @@ export default {
 
   effects: {
     /* 获取菜单 */
-    *fetchMenu (_, { call, put }) {
+    *fetchMenu(_, { call, put }) {
       try {
         const { data: menus } = yield call(getMenusInfo);
         yield put({
@@ -25,7 +26,7 @@ export default {
     },
 
     /* 获取商铺列表 */
-    *fetchShop ({ payload }, { call, put }) {
+    *fetchShop({ payload }, { call, put }) {
       const { data: shops } = yield call(getShopInfo, payload);
 
       yield put({
@@ -34,7 +35,7 @@ export default {
       });
     },
     /* 切换门店 */
-    *switch ({ payload }, { call, put }) {
+    *switch({ payload }, { call, put }) {
       if (payload.key) {
         localStorage.setItem('authId', payload.key);
       }
@@ -46,19 +47,19 @@ export default {
   },
 
   reducers: {
-    changeLayoutCollapsed (state, { payload }) {
+    changeLayoutCollapsed(state, { payload }) {
       return {
         ...state,
         collapsed: payload,
       };
     },
-    setMenu (state, { payload }) {
+    setMenu(state, { payload }) {
       return {
         ...state,
         menus: payload,
       };
     },
-    setShopList (state, { payload }) {
+    setShopList(state, { payload }) {
       return {
         ...state,
         shops: payload,
@@ -67,7 +68,7 @@ export default {
   },
 
   subscriptions: {
-    setup ({ history }) {
+    setup({ history }) {
       // Subscribe history(url) change, trigger `load` action if pathname is `/`
       return history.listen(({ pathname, search }) => {
         if (typeof window.ga !== 'undefined') {
