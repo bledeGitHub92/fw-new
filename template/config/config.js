@@ -30,12 +30,6 @@ export default {
           : {}),
       },
     ],
-    [
-      'umi-plugin-ga',
-      {
-        code: 'UA-72788897-6',
-      },
-    ],
   ],
   targets: {
     ie: 11,
