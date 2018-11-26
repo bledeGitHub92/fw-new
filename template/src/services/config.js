@@ -1,1 +1,13 @@
 export const HOST = '/api/admin';
+export const STOCK_HOST = '/api/stock';
+export const OOP_HOST = '/api/oop';
+export const DEALER_API = `${OOP_HOST}/shop/getTree`;
+export const HR_HOST = '/api/hr';
+export const CRM_HOST = '/api/crm';
+export const COUPON_HOST = '/api/coupon';
+export const WX_HOST = '/wx';
+export const AUTH_HOST = '/api/wx/auth';
+export const MATERIAL_HOST = '/api/material';
+export const WX_MSG_HOME_URL = '/wx/msg/home';
+export const WX_MSG_EDIT_URL = '/wx/msg/edit';
+export const WX_MSG_POST_URL = '/wx/msg/post';

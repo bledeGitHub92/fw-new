@@ -12,9 +12,9 @@ var spinner = ora();
 var ownPath = __dirname;
 
 /**
- * @desc 待覆盖目录
+ * @desc 待覆盖文件
  */
-var overrideDirs = [
+var overridePaths = [
   'src/interface',
   'src/components',
   'src/e2e',
@@ -33,7 +33,7 @@ var overrideDirs = [
   '.eslintrc.js',
 ];
 
-function appUpgrade (projectName) {
+function appUpgrade(projectName) {
   // 项目路径
   var root = path.resolve(projectName);
   var oldPackagePath = path.resolve(root, 'package.json');
@@ -92,14 +92,12 @@ function appUpgrade (projectName) {
 
           // 更新 package.json
           fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify(newPackageFile, null, 2));
-          // 更新 overrideDirs 里的文件
-          overrideDirs.forEach(file => {
+          // 更新 overridePaths 里的文件
+          overridePaths.forEach(file => {
             var src = path.resolve(ownPath, 'template', file);
             var dest = path.resolve(root, file);
             fs.copySync(src, dest);
-            console.log(
-              chalk.dim(dest + ' 已更新!')
-            );
+            console.log(chalk.dim(dest + ' 已更新!'));
           })
 
           console.log();
