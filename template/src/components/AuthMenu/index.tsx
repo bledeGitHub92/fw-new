@@ -1,7 +1,6 @@
 import React, { Props, Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { message } from 'antd';
 import { common } from '@/interface/common';
 import PageLoading from '@/components/PageLoading';
 
@@ -59,7 +58,6 @@ class AuthMenu extends Component {
         ? currHost.children[0].path
         : menus[0].children[0].path;
 
-    message.info(targetPath);
     window.location.href = targetPath;
     return isRedirect;
   }
