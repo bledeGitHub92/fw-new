@@ -16,7 +16,7 @@ interface State {
   menus: global.menus,
 }))
 class AuthMenu extends Component {
-  get injected () {
+  get injected() {
     return this.props as Injected;
   }
 
@@ -24,28 +24,28 @@ class AuthMenu extends Component {
     next: false,
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { dispatch } = this.injected;
 
     dispatch({ type: 'global/fetchMenu' });
   }
 
-  componentDidUpdate (prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevProps.menus !== this.injected.menus) {
       this.setState({ next: false, });
-      this.getNextRoute();
-      this.setState({ next: true, });
-
+      const isRedirect = this.getNextRoute();
+      this.setState({ next: !isRedirect, });
     }
   }
 
-  getNextRoute () {
+  getNextRoute() {
     const { menus, dispatch, location } = this.injected
     const isDev = process.env.NODE_ENV === 'development';
     const DEV_HOST = process.env.DEV_HOST;
     const isNoPower = menus.length === 0;
     const hostname = isDev ? DEV_HOST : window.location.hostname;
     const currHost = menus.find(({ domain }) => domain === hostname);
+    const isRedirect = currHost.children.length === 0;
 
     if (isNoPower) {
       return dispatch(routerRedux.replace('/403'));
@@ -59,9 +59,10 @@ class AuthMenu extends Component {
         : menus[0].children[0].path;
 
     window.location.href = targetPath;
+    return isRedirect;
   }
 
-  render () {
+  render() {
     const { next, } = this.state;
 
     if (!next) { return <PageLoading /> }
@@ -70,7 +71,7 @@ class AuthMenu extends Component {
       <>
         {this.injected.children}
       </>
-    )
+    );
   }
 }
 
