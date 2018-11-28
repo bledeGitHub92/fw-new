@@ -26,7 +26,6 @@ class AuthMenu extends Component {
 
   componentDidMount() {
     const { dispatch } = this.injected;
-
     dispatch({ type: 'global/fetchMenu' });
   }
 
@@ -45,13 +44,13 @@ class AuthMenu extends Component {
     const isNoPower = menus.length === 0;
     const hostname = isDev ? DEV_HOST : window.location.hostname;
     const currHost = menus.find(({ domain }) => domain === hostname);
+    const isRedirect = !currHost || currHost.children.length === 0;
 
     if (isNoPower) {
       return dispatch(routerRedux.replace('/403'));
     }
 
     const targetMenu = currHost && currHost.children.find(({ path }) => path.split('#')[1] === location.pathname);
-    const isRedirect = !targetMenu;
     const targetPath = targetMenu
       ? targetMenu.path
       : currHost
