@@ -14,8 +14,9 @@ interface State {
 
 @connect(({ loading, }) => ({
 }))
-class extends PureComponent {
+class Foo extends PureComponent {
   get injected() {
+    // @ts-ignore
     return this.props as Injected;
   }
 
@@ -40,14 +41,13 @@ class extends PureComponent {
 
 
   render() {
-
     return (
-      <PageHeaderWrapper title=''>
+      <PageHeaderWrapper title="">
         <Card>
         </Card>
       </PageHeaderWrapper>
-    )
+    );
   }
 }
 
-export default ;
+export default Foo;
