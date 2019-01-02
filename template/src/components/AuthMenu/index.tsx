@@ -6,6 +6,7 @@ import PageLoading from '@/components/PageLoading';
 
 interface Injected extends common.ConnectProps, Props<undefined> {
   menus: any[];
+  children: React.ReactNode;
 }
 
 interface State {
@@ -31,6 +32,9 @@ class AuthMenu extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.menus !== this.injected.menus) {
+      if (process.env.NODE_ENV === 'development') {
+        return this.setState({ next: true });
+      }
       this.setState({ next: false, });
       const isRedirect = this.getNextRoute();
       this.setState({ next: !isRedirect, });
@@ -38,7 +42,7 @@ class AuthMenu extends Component {
   }
 
   getNextRoute() {
-    const { menus, dispatch, location } = this.injected
+    const { menus, dispatch, location } = this.injected;
     const isDev = process.env.NODE_ENV === 'development';
     const DEV_HOST = process.env.DEV_HOST;
     const isNoPower = menus.length === 0;
@@ -64,7 +68,7 @@ class AuthMenu extends Component {
   render() {
     const { next, } = this.state;
 
-    if (!next) { return <PageLoading /> }
+    if (!next) { return <PageLoading />; }
 
     return (
       <>
