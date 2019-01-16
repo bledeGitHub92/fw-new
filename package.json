@@ -29,6 +29,7 @@
     "upgrade.js",
     "page.js",
     "template",
-    "page"
+    "page",
+    "pageApp"
   ]
 }
