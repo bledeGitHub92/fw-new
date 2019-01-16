@@ -1,12 +1,16 @@
-import React, { Props, Component } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { common } from '@/interface/common';
 import PageLoading from '@/components/PageLoading';
+import isEqual from 'lodash/isEqual';
 
-interface Injected extends common.ConnectProps, Props<undefined> {
+interface Props {
+  children: any
+}
+
+interface Injected extends common.ConnectProps, Props {
   menus: any[];
-  children: React.ReactNode;
 }
 
 interface State {
@@ -16,7 +20,7 @@ interface State {
 @connect(({ global }) => ({
   menus: global.menus,
 }))
-class AuthMenu extends Component {
+class AuthMenu extends Component<Props, State> {
   get injected() {
     return this.props as Injected;
   }
@@ -30,8 +34,8 @@ class AuthMenu extends Component {
     dispatch({ type: 'global/fetchMenu' });
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.menus !== this.injected.menus) {
+  componentDidUpdate(prevProps) {
+    if (!isEqual(prevProps.menus, this.injected.menus)) {
       if (process.env.NODE_ENV === 'development') {
         return this.setState({ next: true });
       }

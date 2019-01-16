@@ -52,7 +52,9 @@ declare namespace iHttp {
 
   type PromiseRespa<T> = Promise<ParseResult<T[]>>;
 
-  type PromisePageResp<T> = Promise<ParseResult<common.Page<T>>>;
+  type PResp<T> = ParseResult<common.Page<T>>;
+
+  type PromisePageResp<T> = Promise<PResp<T>>;
   
 }
 

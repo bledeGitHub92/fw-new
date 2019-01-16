@@ -34,7 +34,7 @@ export default [
           }
         }
         return result.join('&');
-      }
+      };
     }
 
     if (config.requestType && config.requestType === 'formdata') {

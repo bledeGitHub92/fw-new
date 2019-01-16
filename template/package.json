@@ -1,5 +1,5 @@
 {
-  "name": "test",
+  "name": "fw-market",
   "version": "1.0.0",
   "description": "An out-of-box UI solution for enterprise applications",
   "private": true,
@@ -28,6 +28,8 @@
     "axios": "^0.18.0",
     "bizcharts": "^3.2.2",
     "bizcharts-plugin-slider": "^2.0.3",
+    "braft-editor": "^2.1.36",
+    "braft-utils": "^3.0.9",
     "classnames": "^2.2.6",
     "dva": "^2.4.0",
     "enquire-js": "^0.2.1",
@@ -44,20 +46,22 @@
     "qs": "^6.5.2",
     "rc-animate": "^2.4.4",
     "react": "^16.5.1",
+    "react-bmap": "1.0.84",
     "react-container-query": "^0.11.0",
     "react-copy-to-clipboard": "^5.0.1",
     "react-document-title": "^2.0.3",
-    "react-bmap": "1.0.84",
     "react-dom": "^16.5.1",
     "react-fittext": "^1.0.0",
     "react-router-dom": "^4.3.1"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.119",
     "@types/react": "^16.4.11",
     "@types/react-dom": "^16.0.6",
     "antd-pro-merge-less": "^0.0.9",
     "antd-pro-theme-webpack-plugin": "^1.1.8",
     "babel-eslint": "^9.0.0",
+    "babel-plugin-import": "^1.11.0",
     "cross-env": "^5.1.1",
     "cross-port-killer": "^1.0.1",
     "enzyme": "^3.4.4",
@@ -81,10 +85,10 @@
     "stylelint-config-prettier": "^4.0.0",
     "stylelint-config-standard": "^18.0.0",
     "typescript-eslint-parser": "^20.1.1",
-    "umi": "^2.0.1",
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "umi": "^2.3.1",
     "umi-plugin-ga": "^1.0.2",
-    "umi-plugin-react": "^1.0.1",
-    "uglifyjs-webpack-plugin": "^2.0.1"
+    "umi-plugin-react": "^1.0.1"
   },
   "optionalDependencies": {
     "puppeteer": "^1.6.0"
@@ -105,5 +109,17 @@
     "last 2 versions",
     "not ie <= 10"
   ],
-  "author": "feewee"
+  "author": "feewee",
+  "babel": {
+    "plugins": [
+      [
+        "import",
+        {
+          "libraryName": "antd",
+          "libraryDirectory": "es",
+          "style": "css"
+        }
+      ]
+    ]
+  }
 }
