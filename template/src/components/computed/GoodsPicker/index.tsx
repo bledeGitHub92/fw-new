@@ -133,7 +133,7 @@ class GoodsPicker extends React.Component<GoodsPickerProps, GoodsPickerState> {
                 dataIndex: 'number',
                 title: '数量',
                 editing: this.isEditing(record),
-              })} 
+              })}
             />
             <Column 
               title="操作" 

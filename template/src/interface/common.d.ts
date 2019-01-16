@@ -120,4 +120,48 @@ declare namespace common {
     pageSize?: number | undefined;
     param?: T;
   }
+
+  /**
+   * searchInput
+   * antd -> Table -> Column -> props -> filterDropdown 属性回调传入的参数
+   */
+  interface FilterDropdownProps {
+    clearFilters: Function,
+    confirm: Function,
+    filters: any,
+    getPopupContainer: Function,
+    prefixCls: string,
+    selectedKeys: any[],
+    setSelectedKeys: Function
+  }
+
+  /**
+   * 表单组件中，form.getFieldDecorator 往子组件中注入的默认参数
+   */
+  interface FieldDecorator {
+    /**
+     * valuePropName指定的值，默认为value，具体的值视情况而定
+     */
+    value?: any,
+
+    /**
+     * trigger 指定的用于监听数据变化的回调函数，默认为onChange，当内部的值改变时，需要调用一次该方法
+     */
+    onChange?: any,
+
+    /**
+     * 表单值的字段，与 getFieldDecorator 第一个字段保持一致
+     */
+    id?: string,
+
+    /**
+     * 字段键值对
+     */
+    'data-__field'?: any,
+
+    /**
+     * 描述所有配置信息，options
+     */
+    'data-__meta'?: any
+  }
 }

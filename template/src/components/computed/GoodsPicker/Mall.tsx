@@ -126,6 +126,11 @@ class Mall extends React.Component<MallProps, MallState> {
         onCancel={onCancel}
         onOk={this.onOk}
         style={{ minWidth: 850 }}
+        footer={[
+          <Button key="submit" type="primary" loading={loading} onClick={this.onOk}>
+            确认
+          </Button>,
+        ]}
       >
         <Form layout="inline">
           <Item label="商品名称">

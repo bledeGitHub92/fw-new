@@ -1,3 +1,6 @@
+// @ts-ignore
+import _default from './images/default.png';
+
 /**
  * 通过唯一的key值判断某项元素中是否存在数组中
  */
@@ -27,4 +30,4 @@ export function deRepetition<T>(data: T[], key?: string): T[] {
   return res;
 }
 
-export const deimg = 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1546092990412&di=23d14132bc75f55f96de12b175472885&imgtype=0&src=http%3A%2F%2Fpic.baike.soso.com%2Fp%2F20140506%2F20140506140951-1468290578.jpg';
+export const deimg = _default;
