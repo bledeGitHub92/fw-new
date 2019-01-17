@@ -22,12 +22,12 @@ class Foo extends React.Component {
     title: '标题'
   });
 
-  state: State = {
-
-  }
-
   get injected() {
     return this.props as InjectedProps;
+  }
+
+  state: State = {
+
   }
 
   render() {
