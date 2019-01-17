@@ -1,6 +1,6 @@
 {
   "name": "fw-new",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "fw fed cli",
   "main": "index.js",
   "dependencies": {
