@@ -30,6 +30,7 @@
     "page.js",
     "template",
     "page",
-    "pageApp"
+    "pageApp",
+    "appNested"
   ]
 }

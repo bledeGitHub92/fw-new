@@ -29,6 +29,7 @@ function select() {
           choices: [
             { name: 'erp模板', value: 'page' },
             { name: 'app模板', value: 'pageApp' },
+            { name: 'app子页面模板', value: 'appNested/nested.tsx' },
           ],
           default: 0
         }
