@@ -120,7 +120,7 @@ export default class BaseMenu extends PureComponent {
               name
             )
           }
-          key={item.path}
+          key={item.path.indexOf('#') > -1 ? item.path.split('#')[1] : item.path}
         >
           {this.getNavMenuItems(item.children)}
         </SubMenu>
