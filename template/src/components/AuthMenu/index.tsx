@@ -58,15 +58,34 @@ class AuthMenu extends Component<Props, State> {
       return dispatch(routerRedux.replace('/403'));
     }
 
-    const targetMenu = currHost && currHost.children.find(({ path }) => path.split('#')[1] === location.pathname);
+    const targetMenu = currHost && this.getTargetMenu(currHost);
     const targetPath = targetMenu
       ? targetMenu.path
       : currHost
         ? currHost.children[0].path
         : menus[0].children[0].path;
-
     window.location.href = targetPath;
     return isRedirect;
+  }
+
+  getTargetMenu = (currHost) => {
+    const pathname = this.injected.location.pathname;
+    const children = Array.isArray(currHost.children) ? currHost.children : [];
+    let targetMenu = null;
+    for (let i = 0, len = children.length; i < len; i++) {
+      let cur = children[i];
+      if (cur.path.split('#')[1] === pathname) {
+        targetMenu = cur;
+        return targetMenu;
+      } else {
+        const ret = this.getTargetMenu(cur);
+        if (ret) {
+          targetMenu = ret;
+          break;
+        }
+      }
+    }
+    return targetMenu;
   }
 
   render() {
