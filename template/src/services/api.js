@@ -8,7 +8,7 @@ export async function getMenusInfo() {
 
 /* 获取商铺列表 */
 export function getShopInfo() {
-  return http.get(`${HOST}/user/authList`);
+  return http.get(`${HOST}/user/psmList`);
 }
 
 /**
