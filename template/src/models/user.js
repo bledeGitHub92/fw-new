@@ -25,7 +25,7 @@ export default {
         yield put({
           type: 'setQRData',
           payload: data,
-        })
+        });
         yield put({ type: 'changeReload', payload: false });
       } catch (e) {
         yield put({ type: 'setQRData', payload: { qrToken: '' } });
@@ -77,7 +77,7 @@ export default {
 
     * fetchUser({ payload }, { call, put }) {
       try {
-        const { data: user } = yield call(getUserInfo, payload);
+        const { data: user } = yield call(api.getUserInfo, payload);
         yield put({
           type: 'setCurrentUser',
           payload: user,
@@ -108,7 +108,7 @@ export default {
       return {
         ...state,
         showReload: payload
-      }
+      };
     }
   },
 };
