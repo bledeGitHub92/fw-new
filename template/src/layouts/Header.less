@@ -5,3 +5,52 @@
   z-index: 9;
   transition: width 0.2s;
 }
+
+.card {
+   height: 90px;
+   border-radius: 4px;
+   cursor: pointer;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 0 30px;
+   background-color: #fafafa;
+   cursor: pointer;
+   transition: all 0.4s;
+
+   &.checked, &:hover {
+     background-color: #4190f7;
+     color: #fff;
+
+    .title, .subText {
+      color: #fff;
+    }
+    
+    .check {
+      visibility: visible;
+    }
+   }
+
+   & + & {
+     margin-top: 15px;
+   }
+}
+
+.title {
+  color: #666;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.4s;
+}
+
+.subText {
+  color: #999;
+  font-size: 14px;
+  transition: all 0.4s;
+}
+
+.check {
+  font-size: 20px;
+  visibility: hidden;
+  color: #fff;
+}

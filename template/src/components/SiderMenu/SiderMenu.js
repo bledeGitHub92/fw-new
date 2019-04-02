@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import styles from './index.less';
 import BaseMenu, { getMenuMatches } from './BaseMenu';
 import { urlToList } from '../_utils/pathTools';
-import ShopList from '@/components/ShopList';
+import IdentityList from '@/components/IdentityList';
 
 const { Sider } = Layout;
 
@@ -29,26 +29,23 @@ const getDefaultCollapsedSubMenus = props => {
  * [{path:string},{path:string}] => {path,path2}
  * @param  menu
  */
-export const getFlatMenuKeys = menu =>
-  menu.reduce((keys, item) => {
-    keys.push(item.path);
-    if (item.children) {
-      return keys.concat(getFlatMenuKeys(item.children));
-    }
-    return keys;
-  }, []);
+export const getFlatMenuKeys = menu => menu.reduce((keys, item) => {
+  keys.push(item.path);
+  if (item.children) {
+    return keys.concat(getFlatMenuKeys(item.children));
+  }
+  return keys;
+}, []);
 
 /**
  * Find all matched menu keys based on paths
  * @param  flatMenuKeys: [/abc, /abc/:id, /abc/:id/info]
  * @param  paths: [/abc, /abc/11, /abc/11/info]
  */
-export const getMenuMatchKeys = (flatMenuKeys, paths) =>
-  paths.reduce(
-    (matchKeys, path) =>
-      matchKeys.concat(flatMenuKeys.filter(item => pathToRegexp(item).test(path))),
-    []
-  );
+export const getMenuMatchKeys = (flatMenuKeys, paths) => paths.reduce(
+  (matchKeys, path) => matchKeys.concat(flatMenuKeys.filter(item => pathToRegexp(item).test(path))),
+  []
+);
 
 export default class SiderMenu extends PureComponent {
   constructor(props) {
@@ -62,8 +59,8 @@ export default class SiderMenu extends PureComponent {
   static getDerivedStateFromProps(props, state) {
     const { pathname } = state;
     if (
-      props.location.pathname !== pathname ||
-      state.flatMenuKeyNums !== props.flatMenuKeys.length
+      props.location.pathname !== pathname
+      || state.flatMenuKeyNums !== props.flatMenuKeys.length
     ) {
       return {
         pathname: props.location.pathname,
@@ -113,7 +110,7 @@ export default class SiderMenu extends PureComponent {
         className={siderClassName}
       >
         <div className="menu-sider-logo" key="logo">
-          <ShopList isMobile={isMobile} />
+          <IdentityList isMobile={isMobile} />
         </div>
         <BaseMenu
           {...this.props}

@@ -272,7 +272,7 @@ class BasicLayout extends React.PureComponent {
   }
 }
 
-export default connect(({ global, setting }) => ({
+export default connect(({ global, setting, }) => ({
   collapsed: global.collapsed,
   layout: setting.layout,
   menus: global.menus,

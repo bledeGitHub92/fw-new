@@ -1,4 +1,4 @@
-import { getMenusInfo, getShopInfo, switchUserAuth } from '@/services/api';
+import { getMenusInfo, getIdentityList, switchUserAuth } from '@/services/api';
 import { getMenuData } from '@/utils/routerUtils';
 import { message } from 'antd';
 
@@ -8,7 +8,7 @@ export default {
   state: {
     collapsed: false,
     menus: [],
-    shops: [],
+    identityList: [],
   },
 
   effects: {
@@ -26,12 +26,12 @@ export default {
     },
 
     /* 获取商铺列表 */
-    *fetchShop({ payload }, { call, put }) {
-      const { data: shops } = yield call(getShopInfo, payload);
+    *fetchIdentityList({ payload }, { call, put }) {
+      const { data: identityList } = yield call(getIdentityList, payload);
 
       yield put({
-        type: 'setShopList',
-        payload: shops,
+        type: 'setIdentityList',
+        payload: identityList,
       });
     },
     /* 切换门店 */
@@ -59,10 +59,10 @@ export default {
         menus: payload,
       };
     },
-    setShopList(state, { payload }) {
+    setIdentityList(state, { payload }) {
       return {
         ...state,
-        shops: payload,
+        identityList: Array.isArray(payload) ? payload : [],
       };
     },
   },
