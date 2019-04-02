@@ -11,7 +11,7 @@ export default {
     currentUser: {},
     qrCode: '',
     qrToken: '',
-    showReload: false,
+    qrStatusCode: 0,
   },
 
   effects: {
@@ -41,10 +41,10 @@ export default {
           type: 'setQRData',
           payload: data,
         });
-        yield put({ type: 'changeReload', payload: false });
+        yield put({ type: 'changeQrStatus', payload: false });
       } catch (e) {
         yield put({ type: 'setQRData', payload: { qrToken: '' } });
-        yield put({ type: 'changeReload', payload: true });
+        yield put({ type: 'changeQrStatus', payload: { showShade, qrCode: '二维码已过期' } });
         message.error(e.message);
       }
     },
@@ -56,8 +56,13 @@ export default {
       try {
         const { payload } = action;
         const { data } = yield call(api.isCodeScanedApi, payload);
-        reloadAuthorized();
-        yield put(routerRedux.push('/'));
+        const { code, } = data;
+        if (code === 0) {
+          reloadAuthorized();
+          yield put(routerRedux.push('/'));
+        } else {
+          yield put({ type: 'changeQrStatus', payload: code });
+        }
       } catch (e) {
         console.log('[扫码 error]', e.message);
       }
@@ -119,10 +124,10 @@ export default {
       };
     },
 
-    changeReload(state, { payload }) {
+    changeQrStatus(state, { payload }) {
       return {
         ...state,
-        showReload: payload
+        qrStatusCode: payload
       };
     }
   },

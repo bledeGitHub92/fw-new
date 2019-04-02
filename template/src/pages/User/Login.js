@@ -1,89 +1,103 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import Link from 'umi/link';
-import { Checkbox, Alert, Icon, message } from 'antd';
+import { Button, Icon } from 'antd';
 import Login from '@/components/Login';
+import { routerRedux } from 'dva/router';
 import styles from './Login.less';
 import logo from '@/assets/logo.png';
 import loginBg from '@/assets/login_bg.png';
-import { routerRedux } from 'dva/router';
 
-const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
+/**
+ * 二维码错误状态
+ *  - error: img 加载失败
+ *  - overDue: 二维码失效
+ */
+const statusList = ['', 'error', 'overDUe'];
 
-@connect(({ login }) => ({
-  login,
+@connect(({ user, loading }) => ({
+  user,
+  fetchCodeLoading: loading.effects['user/fetchQRCode'],
 }))
 class LoginPage extends Component {
   state = {
-    type: 'account',
-    autoLogin: true,
-    submitting: false,
   };
 
-  onTabChange = type => {
-    this.setState({ type });
-  };
+  timer = -1;
 
-  onGetCaptcha = () =>
-    new Promise((resolve, reject) => {
-      this.loginForm.validateFields(['mobile'], {}, (err, values) => {
-        if (err) {
-          reject(err);
-        } else {
-          const { dispatch } = this.props;
-          dispatch({
-            type: 'login/getCaptcha',
-            payload: values.mobile,
-          })
-            .then(resolve)
-            .catch(reject);
-        }
-      });
-    });
+  /**
+   * 轮询开始时间
+   */
+  loopstartTime = -1;
 
-  handleSubmit = async (err, values) => {
-    try {
-      const { dispatch } = this.props;
-      const { type } = this.state;
-      if (!err) {
-        this.setState({
-          submitting: true,
-        });
-        const isAuth = await dispatch({
-          type: 'user/login',
-          payload: {
-            ...values,
-            type,
-          },
-        });
+  /**
+   * 二维码超时时间
+   */
+  overDueTimeLimit = 1000 * 60;
 
-        if (!isAuth) {
-          throw new Error('登录失败');
-        }
+  get qrDesc() {
+    const { user } = this.props;
+    const descMap = {
+      '1999': '二维码加载失败',
+      '2001': '二维码已过期',
+      '2003': '扫码成功',
+      '2004': '已取消授权',
+      '2010': '扫码异常',
+    };
+    return descMap[user.qrStatusCode] || '';
+  }
 
-        dispatch(routerRedux.push('/'));
+  get showShade() {
+    const { user } = this.props;
+    return [1999, 2001, 2003, 2004, 2010].includes(user.qrStatusCode);
+  }
+
+  get showRefresh() {
+    const { user } = this.props;
+    return [1999, 2001, 2004, 2010].includes(user.qrStatusCode);
+  }
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({ type: 'user/fetchQRCode', payload: 328 });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  handleQRCodeError = (e) => {
+    this.props.dispatch({ type: 'user/setQRData', payload: { qrCode: '', qrToken: '' } });
+    this.props.dispatch({ type: 'user/changeQrStatus', payload: 1999 });
+  }
+
+  handleQRCodeLoad = () => {
+    this.startTimer();
+    this.props.dispatch({ type: 'user/changeQrStatus', payload: 0 });
+  }
+
+  startTimer = () => {
+    clearInterval(this.timer);
+    this.loopstartTime = Date.now();
+    this.timer = setInterval(() => {
+      if (Date.now() - this.loopstartTime > this.overDueTimeLimit) {
+        clearInterval(this.timer);
+        this.props.dispatch({ type: 'user/changeQrStatus', payload: 2001 });
+      } else {
+        this.props.dispatch({ type: 'user/checkCodeScaned', payload: this.props.user.qrToken })
       }
-    } catch (e) {
-      this.setState({
-        submitting: false,
-      });
+    }, 1000);
+  }
+
+  fetchQrCode = () => {
+    if (!this.props.fetchCodeLoading) {
+      this.props.dispatch({ type: 'user/fetchQRCode' });
     }
-  };
+  }
 
-  changeAutoLogin = e => {
-    this.setState({
-      autoLogin: e.target.checked,
-    });
-  };
-
-  renderMessage = content => (
-    <Alert style={{ marginBottom: 24 }} message={content} type="error" showIcon />
-  );
-
-  render () {
-    const user = {};
-    const { login } = this.props;
-    const { type, autoLogin, submitting, } = this.state;
+  render() {
+    const { fetchCodeLoading, user, } = this.props;
+    const { qrCode, qrStatusCode } = user;
     const style = {
       bg: {
         background: `url(${loginBg})`,
@@ -108,33 +122,49 @@ class LoginPage extends Component {
           </div>
           <div className={styles.right}>
             <a style={{ marginRight: '16px' }}>APP下载</a>|<a style={{ marginLeft: '16px' }}>关于霏微</a>
-
           </div>
         </div>
         <div className={styles.loginWrapper} style={style.bg}>
           <div className={styles.main}>
-            <Login
-              defaultActiveKey={type}
-              onTabChange={this.onTabChange}
-              onSubmit={this.handleSubmit}
-              submitting={submitting}
-            >
-              <Tab key="account" tab="账户密码登录">
-                {
-                  user.status === 'error' &&
-                  user.type === 'account' &&
-                  !user.submitting &&
-                  this.renderMessage('账户或密码错误（admin/888888）')
-                }
-                <UserName name="account" placeholder="请输入您的账号" />
-                <Password name="password" placeholder="请输入您的密码" />
-              </Tab>
-              <div>
-                <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>自动登录</Checkbox>
-                <Link style={{ float: 'right' }} to="/user/forget-password">忘记密码？</Link>
+            <div>
+              <div style={{ width: '200px', height: '200px', border: '1px solid #eee', marginBottom: '20px', position: 'relative', top: 0, left: 0 }}>
+                {this.showShade && (
+                  <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(255, 255, 255, 0.9)', justifyContent: 'center', alignItems: 'center', display: 'flex', flexDirection: 'column', }}>
+                    <div style={{ color: '#333', fontSize: 14 }}>{
+                      qrStatusCode === 2003 ? (
+                        <>
+                          <span>{this.qrDesc}</span>
+                          <Icon type="check-circle" theme="filled" style={{ color: '#1890ff', marginLeft: '6px' }} />
+                        </>
+                      ) : (
+                          this.qrDesc
+                        )}
+                    </div>
+                    {this.showRefresh && (
+                      <Button
+                        size="small"
+                        type="primary"
+                        style={{ marginTop: '15px' }}
+                        loading={fetchCodeLoading}
+                        onClick={this.fetchQrCode}
+                      >
+                        点击刷新
+                      </Button>
+                    )}
+                  </div>
+                )}
+                {typeof qrCode === 'string' && qrCode !== '' && (
+                  <img
+                    src={qrCode}
+                    onError={this.handleQRCodeError}
+                    onLoad={this.handleQRCodeLoad}
+                    style={{ width: '100%', objectFit: 'contain' }}
+                    alt=""
+                  />
+                )}
               </div>
-              <Submit loading={submitting}>登录</Submit>
-            </Login>
+              <div style={{ color: '#333', fontSize: 14 }}>打开霏微汽车云APP扫描二维码</div>
+            </div>
           </div>
         </div>
 
