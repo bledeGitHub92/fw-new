@@ -18,12 +18,10 @@ interface Props {
 
 interface Injected extends common.ConnectProps, Props {
   identityList: Shops;
-  fetchingShop: boolean;
 }
 
 @connect(({ global: { identityList }, loading }) => ({
   identityList,
-  fetchingShop: loading.effects['global/fetchIdentityList'],
 }))
 class ShopList extends Component<Props> {
   get injected() {
@@ -50,22 +48,20 @@ class ShopList extends Component<Props> {
   };
 
   render() {
-    const { identityList = [], fetchingShop, isMobile } = this.injected;
+    const { identityList = [], isMobile } = this.injected;
 
     return (
       <div className={styles.shops__menu__wrapper}>
-        <Spin spinning={fetchingShop}>
-          <Menu
-            theme="dark"
-            mode={isMobile ? 'inline' : 'vertical'}
-            style={{ width: '100%', height: 'auto', background: 'transparent' }}
-            onClick={this.handleItemClick}
-          >
-            <SubMenu
-              title={<span style={{ color: '#fff', fontSize: 18, fontWeight: 'bold' }}>霏车车集团版</span>}
-            />
-          </Menu>
-        </Spin>
+        <Menu
+          theme="dark"
+          mode={isMobile ? 'inline' : 'vertical'}
+          style={{ width: '100%', height: 'auto', background: 'transparent' }}
+          onClick={this.handleItemClick}
+        >
+          <SubMenu
+            title={<span style={{ color: '#fff', fontSize: 18, fontWeight: 'bold' }}>霏车车集团版</span>}
+          />
+        </Menu>
       </div>
     );
   }
