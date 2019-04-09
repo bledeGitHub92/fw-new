@@ -17,19 +17,19 @@ interface State {
 
 @inject('FooStore')
 @observer
-class Foo extends React.Component {
+class Foo extends React.Component<any, State> {
   get injected() {
     return this.props as InjectedProps;
   }
 
-  state: State = {
+  state = {
 
   }
 
   render() {
     return (
       <Provider headerTitle="">
-        <View style={{ flex: 1, backgroundColor: '#f4f6fa' }}>
+        <View style={style.wrapper}>
           
         </View>
       </Provider>
@@ -39,7 +39,10 @@ class Foo extends React.Component {
 
 
 const style = StyleSheet.create({
-
+  wrapper: {
+    flex: 1,
+    backgroundColor: '#f4f6fa',
+  }
 });
 
 export default Foo;

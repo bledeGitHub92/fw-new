@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { NavigationProps, NOConfigProps } from 'src/interfaces';
-import { NavigationStackScreenOptions } from 'react-navigation';
+import { NavigationProps } from 'src/interfaces';
 import { inject, observer } from 'mobx-react/native';
 import { FooStore } from '../store';
 import { PullRenderItem } from 'components/PullRefresh/interface';
 import PullFlatList from 'components/PullRefresh/PullFlatList';
+import { Provider } from 'components/elements@2.0';
 
 interface InjectedProps extends NavigationProps {
   FooStore: FooStore,
@@ -24,12 +24,12 @@ export interface NavigationParams {
 
 @inject('FooStore')
 @observer
-class Nested extends React.Component {
-  static navigationOptions = ({ navigation }: NOConfigProps): NavigationStackScreenOptions => ({
-    title: '标题'
-  });
+class Nested extends React.Component<any, State> {
+  navigationParams: NavigationParams = {
 
-  state: State = {
+  }
+  
+  state = {
 
   }
 
@@ -37,19 +37,22 @@ class Nested extends React.Component {
     return this.props as InjectedProps;
   }
 
-  navigationParams: NavigationParams = {
-
-  }
-
   render() {
     return (
-      <View />
+      <Provider headerTitle="">
+        <View style={style.wrapper}>
+
+        </View>
+      </Provider>
     );
   }
 }
 
 const style = StyleSheet.create({
-
+  wrapper: {
+    flex: 1,
+    backgroundColor: '#f4f6fa',
+  }
 });
 
 export default Nested;
