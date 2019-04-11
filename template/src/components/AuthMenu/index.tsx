@@ -37,9 +37,6 @@ class AuthMenu extends Component<Props, State> {
 
   componentDidUpdate(prevProps) {
     if (!isEqual(prevProps.menus, this.injected.menus)) {
-      // if (process.env.NODE_ENV === 'development') {
-      //   return this.setState({ next: true });
-      // }
       this.setState({ next: false, });
       const isRedirect = this.getNextRoute();
       this.setState({ next: !isRedirect, });
