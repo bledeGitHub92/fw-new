@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
 import { common } from '@/interface/common';
 import PageLoading from '@/components/PageLoading';
 import isEqual from 'lodash/isEqual';
+import router from 'umi/router';
+import customRouterList from './customRouterList';
 
 interface Props {
   children: any
@@ -36,9 +37,9 @@ class AuthMenu extends Component<Props, State> {
 
   componentDidUpdate(prevProps) {
     if (!isEqual(prevProps.menus, this.injected.menus)) {
-      if (process.env.NODE_ENV === 'development') {
-        return this.setState({ next: true });
-      }
+      // if (process.env.NODE_ENV === 'development') {
+      //   return this.setState({ next: true });
+      // }
       this.setState({ next: false, });
       const isRedirect = this.getNextRoute();
       this.setState({ next: !isRedirect, });
@@ -46,7 +47,7 @@ class AuthMenu extends Component<Props, State> {
   }
 
   getNextRoute() {
-    const { menus, dispatch, location } = this.injected;
+    const { menus } = this.injected;
     const isDev = process.env.NODE_ENV === 'development';
     const DEV_HOST = process.env.DEV_HOST;
     const isNoPower = menus.length === 0;
@@ -55,7 +56,7 @@ class AuthMenu extends Component<Props, State> {
     const isRedirect = !currHost || currHost.children.length === 0;
 
     if (isNoPower) {
-      return dispatch(routerRedux.replace('/403'));
+      return router.replace('/403');
     }
 
     const targetMenu = currHost && this.getTargetMenu(currHost);
@@ -70,6 +71,15 @@ class AuthMenu extends Component<Props, State> {
 
   getTargetMenu = (currHost) => {
     const pathname = this.injected.location.pathname;
+
+    // 刷新页面时，保留在自定义的子路由页面
+    const routerName = customRouterList.find(router => router === pathname);
+    if (routerName) {
+      let query = this.injected.location.search;
+      return { path: `#${routerName}${query}`, }
+    }
+
+    // 刷新页面时，在权限菜单里查找路由
     const children = Array.isArray(currHost.children) ? currHost.children : [];
     let targetMenu = null;
     for (let i = 0, len = children.length; i < len; i++) {

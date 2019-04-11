@@ -1,6 +1,6 @@
-import createError from '../createError';
-import iHttp from '../request';
 import { AxiosResponse } from 'axios';
+import createError from '../createError';
+import iHttp from '../request.d';
 
 /**
  * @desc 如果找不到response.data.data，则将返回格式解析为统一格式
@@ -19,7 +19,6 @@ function parseResponse<T>(response: AxiosResponse): iHttp.ParseResult<T> {
 export default [
   response => {
     let data = response.data;
-
     if (data) {
       if (data.success === false) {
         return createError(response);
@@ -35,6 +34,6 @@ export default [
 
     return createError(response);
   }, error => {
-    return createError(error.response);
+    return createError(error);
   }
-]
+];

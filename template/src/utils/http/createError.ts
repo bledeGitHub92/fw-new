@@ -1,5 +1,6 @@
-import { AxiosResponse } from 'axios';
-import iHttp from './request';
+import { AxiosError } from 'axios';
+import router from 'umi/router';
+import iHttp from './request.d';
 
 export const ERROR_MSG: iHttp.ErrorCode = {
   500: '500, 服务器异常，请稍后再试',
@@ -20,54 +21,54 @@ export const ERROR_MSG: iHttp.ErrorCode = {
   10002: '网络异常，请确保您能够正常访问网络',
   10003: '该数据为app版本发布信息，数据格式与普通的返回结果不一致',
   10004: '请求已经终止',
+  10005: '请求超时，请重试。',
+  10006: '请求未发送成功',
   '-1': '当前请求异常'
-}
+};
 
-function createError(responseError: AxiosResponse) {
-  let errorCode, errorMsg, response = {};
+function createError(error: AxiosError) {
+  const response = error.response;
+  let request = error.request;
+  let config = error.config;
+  let errorCode = -1;
+  let data: any = {};
 
   // 请求已经发送，并且服务器有返回
-  if (responseError.data || responseError.status) {
-    response = responseError.data || responseError;
+  if (response) {
+    // 重新登录
+    if (response.status === 401) {
+      errorCode = 401;
+      router.push('/user/login');
+    }
 
-    let data = responseError.data;
+    data = response.data || response;
 
     if (data && typeof data === 'object') {
-      errorMsg =
-        data.result ||
-        data.error_msg ||
-        data.message ||
-        data.description;
-      errorCode = data.code || data.status || responseError.status;
+      errorCode = data.code
+        || data.status
+        || response.status;
     }
     if (!errorCode) {
-      errorCode = responseError.status;
+      errorCode = response.status;
     }
-    if (!errorMsg) {
-      errorMsg = responseError.statusText;
-    }
-    // @ts-ignore
-  } else if (responseError.request) { // 请求已经发送但是没有收到服务端响应
-    console.log('请求已经发送但是没有收到服务端响应');
-    if (!errorCode) {
-      errorCode = responseError.status;
-      errorMsg = responseError.statusText;
-    }
-
-  } else { // 请求未发送
-    errorMsg = '请求未发送成功';
+    // 请求已经发送但是没有收到服务端响应
+  } else if (request) {
+    errorCode = 10005;
+    // 请求未发送
+  } else {
+    errorCode = 10006;
   }
 
   if (!errorCode) {
     errorCode = -1;
   }
 
-  const error: iHttp.ErrorMsg = new Error(errorMsg);
-  error.errorCode = errorCode;
-  error.errorMsg = errorMsg || ERROR_MSG[errorCode];
-  error.response = response;
+  const newError: iHttp.ErrorMsg = new Error(ERROR_MSG[errorCode]);
+  newError.errorCode = errorCode;
+  newError.errorMsg = ERROR_MSG[errorCode];
+  newError.response = data;
 
-  return Promise.reject(error);
+  return Promise.reject(newError);
 }
 
 export default createError;
