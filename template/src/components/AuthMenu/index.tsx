@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { common } from '@/interface/common';
 import PageLoading from '@/components/PageLoading';
+import { Spin } from 'antd';
 import isEqual from 'lodash/isEqual';
 import router from 'umi/router';
 import customRouterList from './customRouterList';
@@ -42,7 +43,7 @@ class AuthMenu extends Component<Props, State> {
       this.setState({ next: !isRedirect, });
     }
   }
-
+  
   getNextRoute() {
     const { menus } = this.injected;
     const isDev = process.env.NODE_ENV === 'development';
@@ -65,7 +66,7 @@ class AuthMenu extends Component<Props, State> {
     window.location.href = targetPath;
     return isRedirect;
   }
-
+  
   getTargetMenu = (currHost) => {
     const pathname = this.injected.location.pathname;
 
@@ -98,12 +99,10 @@ class AuthMenu extends Component<Props, State> {
   render() {
     const { next, } = this.state;
 
-    if (!next) { return <PageLoading />; }
-
     return (
-      <>
+      <Spin spinning={!next} tip="初始化中...">
         {this.injected.children}
-      </>
+      </Spin>
     );
   }
 }

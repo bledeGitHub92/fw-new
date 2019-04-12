@@ -18,6 +18,7 @@ import Header from './Header';
 import Context from './MenuContext';
 import Exception403 from '../pages/Exception/403';
 import { TITLE } from '../utils/const';
+import GlobalRetry from '@/components/GlobalRetry';
 
 const { Content } = Layout;
 
@@ -267,6 +268,7 @@ class BasicLayout extends React.PureComponent {
           </ContainerQuery>
         </DocumentTitle>
         {this.renderSettingDrawer()}
+        <GlobalRetry />
       </React.Fragment>
     );
   }

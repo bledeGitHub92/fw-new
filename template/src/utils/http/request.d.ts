@@ -45,7 +45,7 @@ declare namespace iHttp {
   interface ErrorMsg extends Error {
     errorCode?: number | string,
     errorMsg?: string,
-    response?: any
+    response?: any,
   }
 
   type PromiseResp<T> = Promise<ParseResult<T>>;
@@ -55,7 +55,7 @@ declare namespace iHttp {
   type PResp<T> = ParseResult<common.Page<T>>;
 
   type PromisePageResp<T> = Promise<PResp<T>>;
-  
+
 }
 
 export default iHttp;

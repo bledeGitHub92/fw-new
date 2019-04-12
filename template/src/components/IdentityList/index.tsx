@@ -37,16 +37,6 @@ class ShopList extends Component<Props> {
     }
   }
 
-  handleItemClick = ({ key }) => {
-    if (!key) return;
-    const { dispatch } = this.injected;
-
-    dispatch({
-      type: 'global/switch',
-      payload: { key },
-    });
-  };
-
   render() {
     const { identityList = [], isMobile } = this.injected;
 
@@ -56,7 +46,6 @@ class ShopList extends Component<Props> {
           theme="dark"
           mode={isMobile ? 'inline' : 'vertical'}
           style={{ width: '100%', height: 'auto', background: 'transparent' }}
-          onClick={this.handleItemClick}
         >
           <SubMenu
             title={<span style={{ color: '#fff', fontSize: 18, fontWeight: 'bold' }}>霏车车集团版</span>}

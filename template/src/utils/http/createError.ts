@@ -67,6 +67,8 @@ function createError(error: AxiosError) {
   newError.errorCode = errorCode;
   newError.errorMsg = ERROR_MSG[errorCode];
   newError.response = data;
+  // @ts-ignore
+  newError.config = config;
 
   return Promise.reject(newError);
 }
