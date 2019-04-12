@@ -1,4 +1,4 @@
-import iHttp from '../request';
+import iHttp from '../request.d';
 
 export default [
   (config: iHttp.HttpRequestConfig) => {
@@ -49,9 +49,9 @@ export default [
           f.append(key, value);
         });
         return f;
-      }
+      };
     }
 
     return config;
   }
-]
+];

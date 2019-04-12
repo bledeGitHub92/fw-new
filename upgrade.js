@@ -14,7 +14,7 @@ var ownPath = __dirname;
 /**
  * @desc 待覆盖文件
  */
-var overridePaths = [
+const overridePaths = [
   'src/interface',
   'src/components',
   'src/e2e',
@@ -32,6 +32,14 @@ var overridePaths = [
   'tsconfig.json',
   '.eslintrc.js',
 ];
+
+/**
+ * @desc 带覆盖过滤
+ */
+const overrideFilter = [
+  'src/services/config.js',
+  'src/pages/document.ejs',
+]
 
 function appUpgrade(projectName) {
   // 项目路径
@@ -96,7 +104,13 @@ function appUpgrade(projectName) {
           overridePaths.forEach(file => {
             var src = path.resolve(ownPath, 'template', file);
             var dest = path.resolve(root, file);
-            fs.copySync(src, dest);
+            fs.copySync(src, dest, {
+              filter: (src, dest) => {
+                return overrideFilter.every(file => {
+                  return path.resolve(ownPath, 'template', file) !== src
+                });
+              }
+            });
             console.log(chalk.dim(dest + ' 已更新!'));
           })
 
