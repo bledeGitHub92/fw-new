@@ -61,8 +61,8 @@ class AuthMenu extends Component<Props, State> {
     const targetPath = targetMenu
       ? targetMenu.path
       : currHost
-        ? currHost.children[0].path
-        : menus[0].children[0].path;
+        ? this.getDefaultPath(currHost.children)
+        : this.getDefaultPath(menus[0].children);
     window.location.href = targetPath;
     return isRedirect;
   }
@@ -94,6 +94,13 @@ class AuthMenu extends Component<Props, State> {
       }
     }
     return targetMenu;
+  }
+
+  // 没有匹配到菜单时，获取第一个菜单路径
+  getDefaultPath = (list: any[]) => {
+    let first = list[0];
+    let children = first.children;
+    return Array.isArray(children) && children.length > 0 ? this.getDefaultPath(children) : first.path;
   }
 
   render() {
