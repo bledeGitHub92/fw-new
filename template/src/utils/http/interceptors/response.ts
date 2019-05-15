@@ -21,7 +21,7 @@ export default [
     let data = response.data;
     if (data) {
       if (data.success === false) {
-        return createError(response);
+        return Promise.reject(new Error(data.result));
       }
 
       if (data.data) {
